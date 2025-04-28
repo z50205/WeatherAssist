@@ -9,7 +9,7 @@ app.include_router(messagerouter)
 
 origins = [
     "http://127.0.0.1:8000",
-    # "http://githubsite.com"
+    "https://z50205.github.io"
 ]
 
 app.add_middleware(
