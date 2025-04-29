@@ -1,5 +1,5 @@
 let emailForm=document.getElementById("email");
-let BACKEND_IP="http://13.112.29.121:8002";
+let BACKEND_IP="https://bizara.link";
 emailForm.addEventListener("submit",async (event)=>{
     event.preventDefault();
     const form=new FormData(event.target);
