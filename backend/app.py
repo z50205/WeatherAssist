@@ -1,14 +1,15 @@
 from fastapi import FastAPI
-from .routers import discordrouter,messagerouter
+from .routers import discordrouter,emailrouter
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 app.include_router(discordrouter)
-app.include_router(messagerouter)
+app.include_router(emailrouter)
 
 origins = [
     "http://127.0.0.1:8000",
+    "http://127.0.0.1:5500",
     "https://z50205.github.io"
 ]
 
