@@ -1,14 +1,312 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/styles/index.css">
-    <script src="static/scripts/index.js" defer></script>
-    <title>Document</title>
-</head>
-<body>
-    <!-- 請雅媛協作切版 -->
-     <div id="try"></div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeatherAssist</title>
+    <link rel="stylesheet" href="../static/styles/index.css" />
+  </head>
+  <body>
+    <!-- popup window -->
+    <div class="popup-window">
+      <button class="close-button">
+        <img src="../static/images/close-btn.png" alt="close button" />
+      </button>
+      <div class="popup-content">
+        <div class="popup-title">分享天氣旅程</div>
+        <div class="dc-webhook-wrapper">
+          <img src="../static/images/dc_icon.png" alt="discord icon" />
+          <input
+            type="text"
+            class="webhook-input"
+            placeholder="請輸入 Discord Webbook"
+          />
+          <button type="button" class="submit-btn">發送</button>
+        </div>
+        <div class="email-input-wrapper">
+          <img src="../static/images/email-icon.png" alt="email icon" />
+          <input type="text" class="email-input" placeholder="請輸入 Email" />
+          <button type="button" class="submit-btn">發送</button>
+        </div>
+      </div>
+    </div>
+    <!-- Overlay -->
+    <div class="overlay"></div>
+    <!-- main content -->
+    <div class="maincontent">
+      <div class="departure">
+        <div class="departure-location">
+          <div class="arrow-indicator">
+            <img src="../static/images/Expand_right.png" alt="expand-arrow" />
+          </div>
+          <div class="departure-district">台北市</div>
+          <div class="favorite-button">
+            <!-- <img
+              class="favorite-star"
+              src="../static/images/star.png"
+              alt="收藏符號"
+            /> -->
+            <img
+              class="favorite-star"
+              src="../static/images/star-highlight.png"
+              alt="選取收藏符號"
+            />
+          </div>
+        </div>
+        <!-- 隱藏的下拉選單 -->
+        <div class="city-dropdown">
+          <ul class="city-list">
+            <li>台北市</li>
+            <li>新北市</li>
+            <li>桃園市</li>
+            <li>臺中市</li>
+            <li>臺南市</li>
+            <li>高雄市</li>
+            <li>基隆市</li>
+            <li>新竹市</li>
+            <li>嘉義市</li>
+            <li>新竹縣</li>
+            <li>苗栗縣</li>
+            <li>彰化縣</li>
+            <li>南投縣</li>
+            <li>雲林縣</li>
+            <li>嘉義縣</li>
+            <li>屏東縣</li>
+            <li>宜蘭縣</li>
+            <li>花蓮縣</li>
+            <li>臺東縣</li>
+            <li>澎湖縣</li>
+            <li>金門縣</li>
+            <li>連江縣</li>
+          </ul>
+        </div>
+        <div class="departure-forecast-days">
+          <div class="departure-forecast-today active">20</div>
+          <div class="departure-forecast-tomorrow">21</div>
+          <div class="departure-forecast-day2">22</div>
+        </div>
+        <div class="current-time-text">現在時刻</div>
+        <div class="departure-current-temperature">
+          <div class="departure-temperature-value">25</div>
+          <div class="departure-temperature-unit">°C</div>
+        </div>
+        <div class="departure-temperature-range">
+          <div class="temperature-image">
+            <img src="../static/images/thermometer.png" alt="thermometer" />
+          </div>
+          <div class="temperature-label-max">最高</div>
+          <div class="departure-temperature-maxvalue">28</div>
+          <div class="temperature-separator">/</div>
+          <div class="temperature-label-min">最低</div>
+          <div class="departure-temperature-minvalue">20</div>
+        </div>
+        <div class="departure-rain-probability">
+          <div class="rain-image">
+            <img src="../static/images/rainfall.png" alt="rainfall" />
+          </div>
+          <div class="rain-label">降雨機率</div>
+          <div class="departure-rainprob-value">60</div>
+          <div class="rain-probability-symbol">%</div>
+        </div>
+        <div class="departure-periodic-weather">
+          <div class="departure-weather-item active">
+            <div class="departure-weather-time">14</div>
+            <div class="departure-weather-icon">
+              <!-- <img
+                class="departure-hour1"
+                src="../static/images/little-whitesun.png"
+                alt="departure-hour1"
+              /> -->
+              <img
+                class="departure-hour1"
+                src="../static/images/little-sun-highlight.png"
+                alt="departure-hour1"
+              />
+            </div>
+          </div>
+          <div class="departure-weather-item">
+            <div class="departure-weather-time">15</div>
+            <div class="departure-weather-icon">
+              <img
+                class="departure-hour2"
+                src="../static/images/rainfall.png"
+                alt="departure-hour2"
+              />
+            </div>
+          </div>
+          <div class="departure-weather-item">
+            <div class="departure-weather-time">16</div>
+            <div class="departure-weather-icon">
+              <img
+                class="departure-hour3"
+                src="../static/images/little-partly-cloudy.png"
+                alt="departure-hour3"
+              />
+            </div>
+          </div>
+          <div class="departure-weather-item">
+            <div class="departure-weather-time">17</div>
+            <div class="departure-weather-icon">
+              <img
+                class="departure-hour4"
+                src="../static/images/cloud-thunder.png"
+                alt="departure-hour4"
+              />
+            </div>
+          </div>
+          <div class="departure-weather-item">
+            <div class="departure-weather-time">18</div>
+            <div class="departure-weather-icon">
+              <img
+                class="departure-hour5"
+                src="../static/images/little-cloud.png"
+                alt="departure-hour5"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="destination">
+        <div class="destination-location">
+          <div class="arrow-indicator">
+            <img src="../static/images/Expand_right.png" alt="expand-arrow" />
+          </div>
+          <div class="destination-district">高雄市</div>
+          <div class="attach-button">
+            <img src="../static/images/attach-link.png" alt="attach-link" />
+          </div>
+        </div>
+        <!-- 隱藏的下拉選單 -->
+        <div class="city-dropdown">
+          <ul class="city-list">
+            <li>台北市</li>
+            <li>新北市</li>
+            <li>桃園市</li>
+            <li>臺中市</li>
+            <li>臺南市</li>
+            <li>高雄市</li>
+            <li>基隆市</li>
+            <li>新竹市</li>
+            <li>嘉義市</li>
+            <li>新竹縣</li>
+            <li>苗栗縣</li>
+            <li>彰化縣</li>
+            <li>南投縣</li>
+            <li>雲林縣</li>
+            <li>嘉義縣</li>
+            <li>屏東縣</li>
+            <li>宜蘭縣</li>
+            <li>花蓮縣</li>
+            <li>臺東縣</li>
+            <li>澎湖縣</li>
+            <li>金門縣</li>
+            <li>連江縣</li>
+          </ul>
+        </div>
+        <div class="destination-forecast-days">
+          <div class="destination-forecast-today active">20</div>
+          <div class="destination-forecast-tomorrow">21</div>
+          <div class="destination-forecast-day2">22</div>
+        </div>
+        <div class="current-time-text">現在時刻</div>
+        <div class="destination-current-temperature">
+          <div class="destination-temperature-value">15</div>
+          <div class="destination-temperature-unit">°C</div>
+          <div class="temp-change-brackets">-10</div>
+        </div>
+        <div class="destination-temperature-range">
+          <div class="temperature-image">
+            <img src="../static/images/thermometer.png" alt="thermometer" />
+          </div>
+          <div class="temperature-label-max">最高</div>
+          <div class="destination-temperature-maxvalue">20</div>
+          <div class="temperature-separator">/</div>
+          <div class="temperature-label-min">最低</div>
+          <div class="destination-temperature-minvalue">10</div>
+        </div>
+        <div class="destination-rain-probability">
+          <div class="rain-image">
+            <img src="../static/images/rainfall.png" alt="rainfall" />
+          </div>
+          <div class="rain-label">降雨機率</div>
+          <div class="destination-rainprob-value">90</div>
+          <div class="rain-probability-symbol">%</div>
+          <div class="rain-probability-change">
+            <div class="bracket-left">(</div>
+            <div class="rainprob-change-value">+30</div>
+            <div class="change-percent-symbol">%</div>
+            <div class="bracket-right">)</div>
+          </div>
+        </div>
+        <div class="destination-periodic-weather">
+          <div class="destination-weather-item active">
+            <div class="destination-weather-time">14</div>
+            <div class="destination-weather-icon">
+              <!-- <img
+                class="destination-hour1"
+                src="../static/images/little-whitesun.png"
+                alt="destination-hour1"
+              /> -->
+              <img
+                class="destination-hour1"
+                src="../static/images/little-sun-highlight.png"
+                alt="destination-hour1"
+              />
+            </div>
+          </div>
+          <div class="destination-weather-item">
+            <div class="destination-weather-time">15</div>
+            <div class="destination-weather-icon">
+              <img
+                class="destination-hour2"
+                src="../static/images/little-whitesun.png"
+                alt="destination-hour2"
+              />
+            </div>
+          </div>
+          <div class="destination-weather-item">
+            <div class="destination-weather-time">16</div>
+            <div class="destination-weather-icon">
+              <img
+                class="destination-hour3"
+                src="../static/images/little-whitesun.png"
+                alt="destination-hour3"
+              />
+            </div>
+          </div>
+          <div class="destination-weather-item">
+            <div class="destination-weather-time">17</div>
+            <div class="destination-weather-icon">
+              <img
+                class="destination-hour4"
+                src="../static/images/little-whitesun.png"
+                alt="destination-hour4"
+              />
+            </div>
+          </div>
+          <div class="destination-weather-item">
+            <div class="destination-weather-time">18</div>
+            <div class="destination-weather-icon">
+              <img
+                class="destination-hour5"
+                src="../static/images/little-whitesun.png"
+                alt="destination-hour5"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-weather-icons">
+      <div class="bottom-departure-weather-icon">
+        <img src="../static/images/b-sun.png" alt="bottom-sun" />
+      </div>
+      <div class="bottom-destination-weather-icon">
+        <img src="../static/images/b-rain.png" alt="bottom-rain" />
+      </div>
+    </div>
+    <footer class="site-footer">
+      <p class="footer-text">COPYRIGHT © 2025 WeatherAssist</p>
+    </footer>
+  </body>
 </html>
