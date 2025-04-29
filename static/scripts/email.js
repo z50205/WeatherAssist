@@ -1,5 +1,5 @@
 let emailForm=document.getElementById("email");
-let BACKEND_IP="http://127.0.0.1:8000";
+let BACKEND_IP="http://13.112.29.121:8002";
 emailForm.addEventListener("submit",async (event)=>{
     event.preventDefault();
     const form=new FormData(event.target);
