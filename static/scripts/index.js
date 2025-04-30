@@ -4,17 +4,36 @@
 
 let locationList = [];
 
+const bgColor = {
+  above30: "#DB2F2F",
+  above25: "#CF6F0F",
+  above20: "#BCD862",
+  above15: "#38D8C0",
+  above10: "#33AEC9",
+  rest: "#4C34BA",
+  findColorCode(temp) {
+    if (temp >= 30) return this.above30;
+    else if (temp >= 25) return this.above25;
+    else if (temp >= 20) return this.above20;
+    else if (temp >= 15) return this.above15;
+    else if (temp >= 10) return this.above10;
+    else return this.rest;
+  },
+};
+
 const state = {
   allLocData: [],
-  currentSpot: {
+  departure: {
     location: "",
+    choosedDate: "",
     choosedTime: "",
-    weatherElement: [],
+    weatherData: [],
   },
-  targetSpot: {
+  destination: {
     location: "",
+    choosedDate: "",
     choosedTime: "",
-    weatherElement: [],
+    weatherData: [],
   },
 };
 
@@ -66,7 +85,63 @@ const getWeatherData = async function () {
 };
 
 // View
-const currSpotLocListView = {
+// 行政區選取區塊
+const departureLocView = {
+  data: null,
+  parentElement: document.querySelector(".departure-location"),
+  dropdownElemet: document.querySelector(".departure>.city-dropdown"),
+  render() {
+    const data = this.data;
+  },
+  toggleDropdownList() {
+    this.dropdownElemet.classList.toggle("hidden");
+  },
+  changeLocName(newName) {
+    this.parentElement.querySelector(".departure-district").textContent =
+      newName;
+  },
+  addHandlerExpandArrow(handler) {
+    this.parentElement.addEventListener("click", (e) => {
+      if (e.target.closest("div").classList.contains("arrow-indicator"))
+        handler();
+    });
+  },
+  addHandlerClickCityLi(handler) {
+    this.dropdownElemet.addEventListener("click", (e) => {
+      handler(e.target.closest("li").textContent);
+    });
+  },
+};
+
+const destinationLocView = {
+  data: null,
+  parentElement: document.querySelector(".destination"),
+  dropdownElemet: document.querySelector(".destination>.city-dropdown"),
+  render() {
+    const data = this.data;
+  },
+  toggleDropdownList() {
+    this.dropdownElemet.classList.toggle("hidden");
+  },
+  changeLocName(newName) {
+    this.parentElement.querySelector(".destination-district").textContent =
+      newName;
+  },
+  addHandlerExpandArrow(handler) {
+    this.parentElement.addEventListener("click", (e) => {
+      if (e.target.closest("div").classList.contains("arrow-indicator"))
+        handler();
+    });
+  },
+  addHandlerClickCityLi(handler) {
+    this.dropdownElemet.addEventListener("click", (e) => {
+      handler(e.target.closest("li").textContent);
+    });
+  },
+};
+
+// 日期選取區塊
+const departureDateView = {
   data: null,
   parentElement: null,
   render() {
@@ -74,7 +149,124 @@ const currSpotLocListView = {
   },
 };
 
-const targetSpotLocListView = {
+// const destinationDateView = {
+//   data: null,
+//   parentElement: null,
+//   render() {
+//     const data = this.data;
+//   },
+// };
+
+// 詳細內容
+const departureDetailView = {
+  data: null,
+  parentElement: document.querySelector(".departure"),
+  render() {
+    const data = this.data;
+    console.log(data);
+    const choosedWeatherData = data.weatherData.find((e) => {
+      return e.date === data.choosedDate && e.time === data.choosedTime;
+    });
+    console.log(choosedWeatherData);
+    // 時刻
+    this.parentElement.querySelector(
+      ".current-time-text"
+    ).textContent = `${data.choosedTime.substring(0, 2)}時`;
+    // 溫度
+    this.parentElement.querySelector(
+      ".departure-temperature-value"
+    ).textContent = choosedWeatherData.temperature;
+    // 溫差
+    document.querySelector(".temp-change-brackets").textContent =
+      document.querySelector(".destination-temperature-value").textContent -
+        choosedWeatherData.temperature >=
+      0
+        ? `+${
+            document.querySelector(".destination-temperature-value")
+              .textContent - choosedWeatherData.temperature
+          }`
+        : document.querySelector(".destination-temperature-value").textContent -
+          choosedWeatherData.temperature;
+    // 最高/最低溫
+    this.parentElement.querySelector(
+      ".departure-temperature-maxvalue"
+    ).textContent = choosedWeatherData.maxTemp;
+    this.parentElement.querySelector(
+      ".departure-temperature-minvalue"
+    ).textContent = choosedWeatherData.minTemp;
+    // 降雨機率
+    this.parentElement.querySelector(".departure-rainprob-value").textContent =
+      choosedWeatherData.chanceOfRain;
+    // 降雨機率差
+    document.querySelector(".rainprob-change-value").textContent =
+      document.querySelector(".departure-rainprob-value").textContent -
+        choosedWeatherData.chanceOfRain >=
+      0
+        ? `+${
+            document.querySelector(".departure-rainprob-value").textContent -
+            choosedWeatherData.chanceOfRain
+          }`
+        : document.querySelector(".departure-rainprob-value").textContent -
+          choosedWeatherData.chanceOfRain;
+  },
+};
+
+const destinationDetailView = {
+  data: null,
+  parentElement: document.querySelector(".destination"),
+  render() {
+    const data = this.data;
+    console.log(data);
+    const choosedWeatherData = data.weatherData.find((e) => {
+      return e.date === data.choosedDate && e.time === data.choosedTime;
+    });
+    console.log(choosedWeatherData);
+    // 時刻
+    this.parentElement.querySelector(
+      ".current-time-text"
+    ).textContent = `${data.choosedTime.substring(0, 2)}時`;
+    // 溫度
+    this.parentElement.querySelector(
+      ".destination-temperature-value"
+    ).textContent = choosedWeatherData.temperature;
+    // 溫差
+    this.parentElement.querySelector(".temp-change-brackets").textContent =
+      choosedWeatherData.temperature -
+        document.querySelector(".departure-temperature-value").textContent >=
+      0
+        ? `+${
+            choosedWeatherData.temperature -
+            document.querySelector(".departure-temperature-value").textContent
+          }`
+        : choosedWeatherData.temperature -
+          document.querySelector(".departure-temperature-value").textContent;
+    // 最高/最低溫
+    this.parentElement.querySelector(
+      ".destination-temperature-maxvalue"
+    ).textContent = choosedWeatherData.maxTemp;
+    this.parentElement.querySelector(
+      ".destination-temperature-minvalue"
+    ).textContent = choosedWeatherData.minTemp;
+    // 降雨機率
+    this.parentElement.querySelector(
+      ".destination-rainprob-value"
+    ).textContent = choosedWeatherData.chanceOfRain;
+    // 降雨機率差
+    this.parentElement.querySelector(".rainprob-change-value").textContent =
+      choosedWeatherData.chanceOfRain -
+        document.querySelector(".departure-rainprob-value").textContent >=
+      0
+        ? `+${
+            choosedWeatherData.chanceOfRain -
+            document.querySelector(".departure-rainprob-value").textContent
+          }`
+        : choosedWeatherData.chanceOfRain -
+          document.querySelector(".departure-rainprob-value").textContent;
+  },
+};
+
+// 時間選取區塊
+const departureTimeView = {
   data: null,
   parentElement: null,
   render() {
@@ -82,51 +274,19 @@ const targetSpotLocListView = {
   },
 };
 
-const currSpotDateView = {
-  data: null,
-  parentElement: null,
-  render() {
-    const data = this.data;
-  },
-};
+// const destinationTimeView = {
+//   data: null,
+//   parentElement: null,
+//   render() {
+//     const data = this.data;
+//   },
+// };
 
-const targetSpotDateView = {
-  data: null,
-  parentElement: null,
-  render() {
-    const data = this.data;
-  },
-};
-
-const currSpotDetailView = {
-  data: null,
-  parentElement: null,
-  render() {
-    const data = this.data;
-  },
-};
-
-const targetSpotDetailView = {
-  data: null,
-  parentElement: null,
-  render() {
-    const data = this.data;
-  },
-};
-
-const currSpotTimeView = {
-  data: null,
-  parentElement: null,
-  render() {
-    const data = this.data;
-  },
-};
-
-const targetSpotTimeView = {
-  data: null,
-  parentElement: null,
-  render() {
-    const data = this.data;
+// 背景
+const backgroundView = {
+  parentElement: document.querySelector("body"),
+  changeBGColor(departureColor, destinationColor) {
+    this.parentElement.style.background = `linear-gradient(to right,${departureColor} 0%,${departureColor} 15%,${destinationColor} 85%,${destinationColor} 100%)`;
   },
 };
 
@@ -141,24 +301,107 @@ const controlUpdateData = async function () {
   }
 };
 
-const controlLocationList = async function () {};
-
-const controlCurrSpot = async function (locationName) {
-  const location = locationName || "臺北市"; // 預設顯示台北市的資料
-  const renderData = state.allLocData.find((e) => e.location === location);
-  console.log(renderData);
+const controlDepLocDropdown = function () {
+  departureLocView.toggleDropdownList();
+};
+const controlChangeDepLoc = function (clickedDist) {
+  departureLocView.toggleDropdownList();
+  departureLocView.changeLocName(clickedDist);
+  state.departure.weatherData = state.allLocData.find(
+    (e) => e.location === clickedDist
+  ).weatherData;
+  departureDetailView.data = state.departure;
+  departureDetailView.render();
+  const depColor = bgColor.findColorCode(
+    document.querySelector(".departure-temperature-value").textContent
+  );
+  const destColor = bgColor.findColorCode(
+    document.querySelector(".destination-temperature-value").textContent
+  );
+  backgroundView.changeBGColor(depColor, destColor);
 };
 
-const controlTargetSpot = async function (locationName) {
+const controlDestLocDropdown = function () {
+  destinationLocView.toggleDropdownList();
+};
+const controlChangeDestLoc = function (clickedDist) {
+  destinationLocView.toggleDropdownList();
+  destinationLocView.changeLocName(clickedDist);
+  state.destination.weatherData = state.allLocData.find(
+    (e) => e.location === clickedDist
+  ).weatherData;
+  destinationDetailView.data = state.destination;
+  destinationDetailView.render();
+  const depColor = bgColor.findColorCode(
+    document.querySelector(".departure-temperature-value").textContent
+  );
+  const destColor = bgColor.findColorCode(
+    document.querySelector(".destination-temperature-value").textContent
+  );
+  backgroundView.changeBGColor(depColor, destColor);
+};
+
+const controlInitDeparture = async function (locationName) {
+  const location = locationName || "臺北市"; // 預設顯示台北市的資料
+  const renderData = state.allLocData.find((e) => e.location === location);
+  const startFrom = renderData.weatherData.find(
+    (e) => e.time.substring(0, 2) == String(now.getHours()).padStart(2, "0")
+  );
+  state.departure.location = location;
+  state.departure.weatherData = renderData.weatherData.slice(
+    renderData.weatherData.indexOf(startFrom)
+  );
+  state.departure.choosedDate = state.departure.weatherData[0].date;
+  state.departure.choosedTime = state.departure.weatherData[0].time;
+  departureDetailView.data = state.departure;
+  departureDetailView.render();
+  const depColor = bgColor.findColorCode(
+    document.querySelector(".departure-temperature-value").textContent
+  );
+  const destColor = bgColor.findColorCode(
+    document.querySelector(".destination-temperature-value").textContent
+  );
+  backgroundView.changeBGColor(depColor, destColor);
+};
+
+const controlDestination = async function (locationName) {
   const location = locationName || "高雄市"; // 預設顯示高雄市的資料
   const renderData = state.allLocData.find((e) => e.location === location);
-  console.log(renderData);
+  const startFrom = renderData.weatherData.find(
+    (e) => e.time.substring(0, 2) == String(now.getHours()).padStart(2, "0")
+  );
+  state.destination.location = location;
+  state.destination.weatherData = renderData.weatherData.slice(
+    renderData.weatherData.indexOf(startFrom)
+  );
+  state.destination.choosedDate = state.destination.weatherData[0].date;
+  state.destination.choosedTime = state.destination.weatherData[0].time;
+  destinationDetailView.data = state.destination;
+  destinationDetailView.render();
+  const depColor = bgColor.findColorCode(
+    document.querySelector(".departure-temperature-value").textContent
+  );
+  const destColor = bgColor.findColorCode(
+    document.querySelector(".destination-temperature-value").textContent
+  );
+  backgroundView.changeBGColor(depColor, destColor);
+};
+
+const constrolBGColor = function () {
+  const depatrureTemp = document.querySelector(
+    ".departure-temperature-value"
+  ).textContent;
+  console.log(depatrureTemp);
 };
 
 const init = async function () {
   await controlUpdateData();
-  controlCurrSpot(state.currentSpot.location);
-  controlTargetSpot(state.targetSpot.location);
+  controlInitDeparture(state.departure.location);
+  controlDestination(state.destination.location);
+  departureLocView.addHandlerExpandArrow(controlDepLocDropdown);
+  departureLocView.addHandlerClickCityLi(controlChangeDepLoc);
+  destinationLocView.addHandlerExpandArrow(controlDestLocDropdown);
+  destinationLocView.addHandlerClickCityLi(controlChangeDestLoc);
 };
 
 init();
