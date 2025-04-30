@@ -1,4 +1,4 @@
-let BACKEND_IP="http://127.0.0.1:8000";
+let BACKEND_IP="https://bizara.link";
 const linkBtn=document.getElementsByClassName("attach-button")[0];
 const emailBtn = document.getElementsByClassName("submit-btn")[1];
 let shotImg=document.getElementById("screenShot")
@@ -21,8 +21,8 @@ emailBtn.addEventListener("click",async (event)=>{
     const formData = new FormData();
     formData.append("image", blob, "screenshot.png");
     formData.append("address", email);
-    formData.append("depature", state.departure);
-    formData.append("destination", state.destination);
+    formData.append("depature", JSON.stringify(state.departure));
+    formData.append("destination", JSON.stringify(state.destination));
     let response=await fetch(BACKEND_IP+"/api/email",{
         method: "POST",
         body:formData
