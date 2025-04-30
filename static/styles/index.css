@@ -16,14 +16,14 @@ body {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   margin: 0;
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 .maincontent {
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
   max-width: 1200px;
-  margin-top: 120px;
+  padding-top: 120px;
 }
 .departure-location,
 .destination-location {
@@ -66,7 +66,7 @@ body {
   -webkit-backdrop-filter: blur(10px);
   border: none;
   border-radius: 4px;
-  margin-top: 2px;
+  margin-top: 0;
   z-index: 10;
   max-height: 400px;
   overflow-y: auto;
@@ -118,12 +118,14 @@ body {
 }
 
 .departure-forecast-days > div.active {
-  background-color: white;
-  color: #cf6f0f;
+  border: 1px solid white;
+  border-radius: 50%/50%;
+  background-color: transparent;
 }
 .destination-forecast-days > div.active {
-  background-color: white;
-  color: #33aec9;
+  border: 1px solid white;
+  border-radius: 50%/50%;
+  background-color: transparent;
 }
 
 .current-time-text {
@@ -214,6 +216,7 @@ body {
 .destination-periodic-weather {
   display: flex;
   gap: 5px;
+  width: 320px;
 }
 
 .departure-weather-item,
@@ -230,7 +233,9 @@ body {
 
 .departure-weather-item.active,
 .destination-weather-item.active {
-  background-color: white;
+  border: 1px solid white;
+  border-radius: 50px;
+  background-color: transparent;
 }
 
 .departure-weather-time,
@@ -241,18 +246,16 @@ body {
   transition: color 0.2s;
 }
 
-.departure-weather-item.active .departure-weather-time {
-  color: #cf6f0f;
-}
-
-.destination-weather-item.active .destination-weather-time {
-  color: #33aec9;
-}
-
 .departure-weather-time,
 .destination-weather-time {
   margin-bottom: 13px;
   text-align: center;
+}
+
+.date-arrow-left,
+.date-arrow-right {
+  display: flex;
+  align-items: center;
 }
 
 .bottom-weather-icons {
@@ -293,7 +296,7 @@ footer {
 
 /* popup window */
 .popup-window {
-  /* display: none; */
+  display: none;
   background-color: #ffffff;
   position: fixed;
   width: 400px;
@@ -362,6 +365,7 @@ footer {
   margin-top: 15px;
   line-height: 1.2;
   vertical-align: middle;
+  color: black;
 }
 
 .webhook-input::placeholder {
@@ -395,7 +399,7 @@ footer {
 
 /* Overlay */
 .overlay {
-  /* display: none; */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -403,4 +407,242 @@ footer {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.3);
   z-index: 100;
+}
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Mobile Layout */
+@media (max-width: 768px) {
+  body {
+    background: linear-gradient(
+      to bottom,
+      #cf6f0f 0%,
+      #cf6f0f 15%,
+      #33aec9 85%,
+      #33aec9 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    margin: 0;
+    overflow-y: auto;
+  }
+
+  .maincontent {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 40px;
+    padding-top: 30px;
+  }
+
+  .departure {
+    width: 100%;
+    margin-bottom: 100px;
+  }
+  .destination {
+    width: 100%;
+    margin-bottom: 50px;
+  }
+
+  /* 下拉選單 */
+  .city-dropdown {
+    max-height: 280px;
+    overflow-y: auto;
+    width: 130px;
+  }
+
+  .city-list li {
+    padding: 8px 35px;
+    font-size: 15px;
+  }
+
+  .departure-location,
+  .destination-location {
+    margin-bottom: 5px;
+  }
+  .arrow-indicator {
+    width: 30px;
+    height: auto;
+  }
+  .favorite-button img {
+    width: 20px;
+    height: auto;
+  }
+  .attach-button img {
+    width: 20px;
+    height: auto;
+  }
+  .departure-district,
+  .destination-district {
+    font-size: 17px;
+  }
+
+  .departure-forecast-days,
+  .destination-forecast-days {
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+
+  .departure-forecast-days > div,
+  .destination-forecast-days > div {
+    width: 24px;
+    height: 24px;
+    font-size: 13px;
+  }
+
+  .current-time-text {
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+
+  .departure-current-temperature,
+  .destination-current-temperature {
+    font-size: 36px;
+    margin-bottom: 5px;
+  }
+
+  .departure-temperature-unit,
+  .destination-temperature-unit {
+    font-size: 36px;
+  }
+
+  .temp-change-brackets {
+    font-size: 20px;
+    margin-left: 6px;
+    line-height: 1;
+    position: relative;
+    top: -5px;
+  }
+  .temp-change-brackets::before {
+    content: "(";
+    margin-right: 1px;
+  }
+
+  .temp-change-brackets::after {
+    content: ")";
+    margin-left: 1px;
+  }
+  .temp-change-brackets::before,
+  .temp-change-brackets::after {
+    font-size: 1em;
+  }
+
+  .departure-temperature-range,
+  .destination-temperature-range {
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+
+  .departure-temperature-maxvalue,
+  .destination-temperature-maxvalue,
+  .temperature-separator,
+  .departure-temperature-minvalue,
+  .destination-temperature-minvalue {
+    font-size: 16px;
+  }
+
+  .temperature-image img {
+    width: 20px;
+    height: 23px;
+  }
+
+  .rain-image img {
+    width: 20px;
+    height: 23px;
+  }
+
+  .departure-rain-probability,
+  .destination-rain-probability {
+    font-size: 15px;
+    margin-bottom: 25px;
+  }
+
+  .departure-periodic-weather,
+  .destination-periodic-weather {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .departure-weather-time,
+  .destination-weather-time {
+    font-size: 12px;
+  }
+
+  .departure-weather-item,
+  .destination-weather-item {
+    padding: 4px 8px;
+  }
+
+  .bottom-weather-icons {
+    display: none;
+  }
+
+  .footer-text {
+    font-size: 12px;
+  }
+
+  /* popup window */
+  .popup-window {
+    margin: 0 auto;
+    width: 80%;
+    height: 150px;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .close-button img {
+    width: 17px;
+    height: auto;
+  }
+
+  .popup-content {
+    margin: 15px 10px 10px 13px;
+  }
+
+  .popup-title {
+    width: 200px;
+    height: 20px;
+    font-size: 17px;
+    margin-bottom: 15px;
+  }
+
+  .dc-webhook-wrapper,
+  .email-input-wrapper {
+    gap: 10px;
+
+    margin-bottom: 15px;
+  }
+
+  .dc-webhook-wrapper img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .email-input-wrapper img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .webhook-input,
+  .email-input {
+    width: 200px;
+    height: 30px;
+  }
+
+  .submit-btn {
+    width: 45px;
+    height: 30px;
+    padding: 5px;
+
+    margin-top: 5px;
+  }
 }
