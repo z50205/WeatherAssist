@@ -30,3 +30,74 @@ emailBtn.addEventListener("click",async (event)=>{
     const result = await response.json();
     console.log(result);
 })
+
+class FavoriteModel{
+    constructor(){
+        let favoriteMemory_str=localStorage.getItem("FAVORITE");
+        if(favoriteMemory_str){
+            let favoriteMemory=JSON.parse(favoriteMemory_str)
+            this.favoriteToggle=true;
+            this.departure=favoriteMemory[0];
+            this.destination=favoriteMemory[1];
+        }else{
+            this.favoriteToggle=false;
+            this.departure="臺北市";
+            this.destination="高雄市";
+        }
+    }
+    setFavorite(departure,destination){
+        this.departure=departure;
+        this.destination=destination;
+        this.favoriteToggle=true;
+        localStorage.setItem("FAVORITE",JSON.stringify([departure,destination]))
+    }
+    removeFavorite(){
+        localStorage.removeItem("FAVORITE");
+        this.favoriteToggle=false;
+    }
+}
+class FavoriteView{
+    constructor(){
+        this.depatureDiv=document.getElementsByClassName("departure-district")[0];
+        this.destinationDiv=document.getElementsByClassName("destination-district")[0];
+        this.starIcon=document.getElementsByClassName("favorite-star")[0];
+    }
+    favoriteListener(handler){
+        this.starIcon.addEventListener("click",handler);
+    }
+
+}
+class FavoriteController{
+    constructor(model,view){
+        this.model=model;
+        this.view=view;
+    }
+    init(){
+        this.initFavorite();
+        this.view.favoriteListener(()=>this.toggleFavorite());
+        this.updateView();
+    }
+    initFavorite(){
+        if (this.model.favoriteToggle){
+                this.view.depatureDiv.textContent=this.model.departure;
+                this.view.destinationDiv.textContent=this.model.destination;
+            }
+    }
+    toggleFavorite(){
+        if (this.model.favoriteToggle){
+            this.model.removeFavorite();
+        }else{
+            let depature=this.view.depatureDiv.textContent;
+            let destination=this.view.destinationDiv.textContent;
+            this.model.setFavorite(depature,destination);
+        }
+        this.updateView();
+    }
+    updateView(){
+        if (this.model.favoriteToggle){
+            this.view.starIcon.src="static/images/star-highlight.png";
+        }else{
+            this.view.starIcon.src="static/images/star.png";
+        }
+    }
+}
