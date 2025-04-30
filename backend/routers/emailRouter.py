@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse,FileResponse
 from pydantic import EmailStr
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
 from dotenv import load_dotenv
-import os,uuid
+import os,uuid,json
 from jinja2 import Template
 
 emailrouter = APIRouter()
@@ -25,7 +25,7 @@ conf = ConnectionConfig(
 )
 
 template_path = os.path.join(os.path.dirname(__file__), "template.html")
-with open(template_path, "r") as file:
+with open(template_path, "r", encoding="utf-8") as file:
     template_str = file.read()
 jinja_template = Template(template_str)
 
@@ -42,8 +42,11 @@ def saveImage(image):
 
 
 @emailrouter.post("/api/email")
-async def createMail(address: EmailStr=Form(...),image=Form(...)):
+async def createMail(address: EmailStr=Form(...),image=Form(...),depature:str=Form(...),destination:str=Form(...),):
     print(address)
+    depature_data= json.loads(depature)
+    destination_data= json.loads(destination)
+    print(destination_data)
     try :
         if image:
             file_name=saveImage(image)
