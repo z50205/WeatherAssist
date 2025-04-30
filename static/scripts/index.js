@@ -21,6 +21,28 @@ const bgColor = {
   },
 };
 
+const weatherIcon = {
+  sunny: "",
+  partlyCloudy: "",
+  cloudy: "",
+  thunderstorm: "",
+  rainy: "",
+  findWeatherIcon(codeStr) {
+    const code = Number(codeStr);
+    if (1 <= code <= 3 || 24 <= code <= 26) return this.sunny;
+    else if (4 <= code <= 5 || code === 27) return this.partlyCloudy;
+    else if (6 <= code <= 7 || code === 28) return this.cloudy;
+    else if (
+      15 <= code <= 18 ||
+      21 <= code <= 22 ||
+      33 <= code <= 36 ||
+      code === 41
+    )
+      return this.thunderstorm;
+    else return this.rainy;
+  },
+};
+
 const state = {
   allLocData: [],
   departure: {
@@ -143,19 +165,66 @@ const destinationLocView = {
 // 日期選取區塊
 const departureDateView = {
   data: null,
-  parentElement: null,
+  parentElement: document.querySelector(".departure-forecast-days"),
   render() {
     const data = this.data;
+    const today = data.choosedDate;
+    const tomorrow = data.weatherData.find((e) => e.date !== today).date;
+    const day2 = data.weatherData.find(
+      (e) => e.date !== today && e.date !== tomorrow
+    ).date;
+    this.parentElement.querySelector(".departure-forecast-today").textContent =
+      today.slice(-2);
+    this.parentElement.querySelector(
+      ".departure-forecast-tomorrow"
+    ).textContent = tomorrow.slice(-2);
+    this.parentElement.querySelector(".departure-forecast-day2").textContent =
+      day2.slice(-2);
+  },
+  changeDate(newDate) {
+    for (let el of this.parentElement.children) {
+      el.classList.remove("active");
+      if (el.textContent === newDate) el.classList.add("active");
+    }
+  },
+  addHandlerClickDate(handler) {
+    this.parentElement.addEventListener("click", (e) => {
+      if (e.target.querySelector("div") === null) handler(e.target.textContent);
+    });
   },
 };
 
-// const destinationDateView = {
-//   data: null,
-//   parentElement: null,
-//   render() {
-//     const data = this.data;
-//   },
-// };
+const destinationDateView = {
+  data: null,
+  parentElement: document.querySelector(".destination-forecast-days"),
+  render() {
+    const data = this.data;
+    const today = data.choosedDate;
+    const tomorrow = data.weatherData.find((e) => e.date !== today).date;
+    const day2 = data.weatherData.find(
+      (e) => e.date !== today && e.date !== tomorrow
+    ).date;
+    this.parentElement.querySelector(
+      ".destination-forecast-today"
+    ).textContent = today.slice(-2);
+    this.parentElement.querySelector(
+      ".destination-forecast-tomorrow"
+    ).textContent = tomorrow.slice(-2);
+    this.parentElement.querySelector(".destination-forecast-day2").textContent =
+      day2.slice(-2);
+  },
+  changeDate(newDate) {
+    for (let el of this.parentElement.children) {
+      el.classList.remove("active");
+      if (el.textContent === newDate) el.classList.add("active");
+    }
+  },
+  addHandlerClickDate(handler) {
+    this.parentElement.addEventListener("click", (e) => {
+      if (e.target.querySelector("div") === null) handler(e.target.textContent);
+    });
+  },
+};
 
 // 詳細內容
 const departureDetailView = {
@@ -163,11 +232,9 @@ const departureDetailView = {
   parentElement: document.querySelector(".departure"),
   render() {
     const data = this.data;
-    console.log(data);
     const choosedWeatherData = data.weatherData.find((e) => {
       return e.date === data.choosedDate && e.time === data.choosedTime;
     });
-    console.log(choosedWeatherData);
     // 時刻
     this.parentElement.querySelector(
       ".current-time-text"
@@ -216,11 +283,9 @@ const destinationDetailView = {
   parentElement: document.querySelector(".destination"),
   render() {
     const data = this.data;
-    console.log(data);
     const choosedWeatherData = data.weatherData.find((e) => {
       return e.date === data.choosedDate && e.time === data.choosedTime;
     });
-    console.log(choosedWeatherData);
     // 時刻
     this.parentElement.querySelector(
       ".current-time-text"
@@ -320,6 +385,16 @@ const controlChangeDepLoc = function (clickedDist) {
   );
   backgroundView.changeBGColor(depColor, destColor);
 };
+const controlChangeDepDate = function (clickedDate) {
+  departureDateView.changeDate(clickedDate);
+  const clickedDateFirstData = state.departure.weatherData.find(
+    (e) => e.date.slice(-2) === clickedDate
+  );
+  state.departure.choosedDate = clickedDateFirstData.date;
+  state.departure.choosedTime = clickedDateFirstData.time;
+  departureDetailView.data = state.departure;
+  departureDetailView.render();
+};
 
 const controlDestLocDropdown = function () {
   destinationLocView.toggleDropdownList();
@@ -340,6 +415,16 @@ const controlChangeDestLoc = function (clickedDist) {
   );
   backgroundView.changeBGColor(depColor, destColor);
 };
+const controlChangeDestDate = function (clickedDate) {
+  destinationDateView.changeDate(clickedDate);
+  const clickedDateFirstData = state.destination.weatherData.find(
+    (e) => e.date.slice(-2) === clickedDate
+  );
+  state.destination.choosedDate = clickedDateFirstData.date;
+  state.destination.choosedTime = clickedDateFirstData.time;
+  destinationDetailView.data = state.destination;
+  destinationDetailView.render();
+};
 
 const controlInitDeparture = async function (locationName) {
   const location = locationName || "臺北市"; // 預設顯示台北市的資料
@@ -355,6 +440,8 @@ const controlInitDeparture = async function (locationName) {
   state.departure.choosedTime = state.departure.weatherData[0].time;
   departureDetailView.data = state.departure;
   departureDetailView.render();
+  departureDateView.data = state.departure;
+  departureDateView.render();
   const depColor = bgColor.findColorCode(
     document.querySelector(".departure-temperature-value").textContent
   );
@@ -364,7 +451,7 @@ const controlInitDeparture = async function (locationName) {
   backgroundView.changeBGColor(depColor, destColor);
 };
 
-const controlDestination = async function (locationName) {
+const controlInitDestination = async function (locationName) {
   const location = locationName || "高雄市"; // 預設顯示高雄市的資料
   const renderData = state.allLocData.find((e) => e.location === location);
   const startFrom = renderData.weatherData.find(
@@ -378,6 +465,8 @@ const controlDestination = async function (locationName) {
   state.destination.choosedTime = state.destination.weatherData[0].time;
   destinationDetailView.data = state.destination;
   destinationDetailView.render();
+  destinationDateView.data = state.destination;
+  destinationDateView.render();
   const depColor = bgColor.findColorCode(
     document.querySelector(".departure-temperature-value").textContent
   );
@@ -387,21 +476,19 @@ const controlDestination = async function (locationName) {
   backgroundView.changeBGColor(depColor, destColor);
 };
 
-const constrolBGColor = function () {
-  const depatrureTemp = document.querySelector(
-    ".departure-temperature-value"
-  ).textContent;
-  console.log(depatrureTemp);
-};
-
 const init = async function () {
   await controlUpdateData();
+  // 初始資料
   controlInitDeparture(state.departure.location);
-  controlDestination(state.destination.location);
+  controlInitDestination(state.destination.location);
+  // 選取地點
   departureLocView.addHandlerExpandArrow(controlDepLocDropdown);
   departureLocView.addHandlerClickCityLi(controlChangeDepLoc);
   destinationLocView.addHandlerExpandArrow(controlDestLocDropdown);
   destinationLocView.addHandlerClickCityLi(controlChangeDestLoc);
+  // 選取日期
+  departureDateView.addHandlerClickDate(controlChangeDepDate);
+  destinationDateView.addHandlerClickDate(controlChangeDestDate);
 };
 
 init();
