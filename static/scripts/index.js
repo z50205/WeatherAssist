@@ -484,6 +484,13 @@ const controlInitDestination = async function (locationName) {
 const init = async function () {
   await controlUpdateData();
   // 初始資料
+  let favoriteController = new FavoriteController(
+    new FavoriteModel(),
+    new FavoriteView()
+  );
+  favoriteController.init();
+  state.departure.location = favoriteController.model.departure;
+  state.destination.location = favoriteController.model.destination;
   controlInitDeparture(state.departure.location);
   controlInitDestination(state.destination.location);
   // 選取地點
