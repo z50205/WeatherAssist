@@ -29,23 +29,30 @@ with open(template_path, "r") as file:
     template_str = file.read()
 jinja_template = Template(template_str)
 
+# 輸入Image圖檔資料，輸出存檔的檔名，供輸出文檔調用。
+def saveImage(image):
+    try:
+        file_path = os.path.join(os.path.dirname(__file__), "emailImage")
+        file_name = str(uuid.uuid4())+".png"
+        with open(os.path.join(file_path,file_name), "wb") as f:
+            f.write(image.file.read())
+            return file_name
+    except Exception as e:
+        print(e)
+
 
 @emailrouter.post("/api/email")
 async def createMail(address: EmailStr=Form(...),image=Form(...)):
     print(address)
     try :
         if image:
-            file_path = os.path.join(os.path.dirname(__file__), "emailImage")
-            file_name = str(uuid.uuid4())+".png"
-            with open(os.path.join(file_path,file_name), "wb") as f:
-                f.write(image.file.read())
+            file_name=saveImage(image)
         email_content = jinja_template.render({"email":address,"image_id":file_name})
         message = MessageSchema(
             subject="Your Weather Tour",
             recipients=[address],
             body=email_content,
             subtype=MessageType.html)
-
         fm = FastMail(conf)
         await fm.send_message(message)
         return JSONResponse(status_code=status.HTTP_200_OK,content={"status":"send sucess"})
