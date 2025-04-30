@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WeatherAssist</title>
     <link rel="stylesheet" href="static/styles/index.css" />
+    <script src="static/scripts/index.js" defer></script>
+    <script src="static/scripts/email.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="static/scripts/webhook.js" defer></script>
   </head>
   <body>
+    <img id="screenShot" style="display: none" />
     <!-- popup window -->
     <div class="popup-window">
       <button class="close-button">
@@ -39,7 +44,7 @@
           <div class="arrow-indicator">
             <img src="static/images/Expand_right.png" alt="expand-arrow" />
           </div>
-          <div class="departure-district">台北市</div>
+          <div class="departure-district">臺北市</div>
           <div class="favorite-button">
             <!-- <img
               class="favorite-star"
@@ -56,7 +61,7 @@
         <!-- 隱藏的下拉選單 -->
         <div class="city-dropdown">
           <ul class="city-list">
-            <li>台北市</li>
+            <li>臺北市</li>
             <li>新北市</li>
             <li>桃園市</li>
             <li>臺中市</li>
@@ -81,9 +86,15 @@
           </ul>
         </div>
         <div class="departure-forecast-days">
+          <div class="arrow-left">
+            <img src="static/images/arrow-left.png" alt="左箭頭" />
+          </div>
           <div class="departure-forecast-today active">20</div>
           <div class="departure-forecast-tomorrow">21</div>
           <div class="departure-forecast-day2">22</div>
+          <div class="arrow-right">
+            <img src="static/images/arrow-right.png" alt="右箭頭" />
+          </div>
         </div>
         <div class="current-time-text">現在時刻</div>
         <div class="departure-current-temperature">
@@ -109,17 +120,15 @@
           <div class="rain-probability-symbol">%</div>
         </div>
         <div class="departure-periodic-weather">
+          <div class="date-arrow-left">
+            <img src="static/images/arrow-left.png" alt="左箭頭" />
+          </div>
           <div class="departure-weather-item active">
             <div class="departure-weather-time">14</div>
             <div class="departure-weather-icon">
-              <!-- <img
-                class="departure-hour1"
-                src="static/images/little-whitesun.png"
-                alt="departure-hour1"
-              /> -->
               <img
                 class="departure-hour1"
-                src="static/images/little-sun-highlight.png"
+                src="static/images/little-whitesun.png"
                 alt="departure-hour1"
               />
             </div>
@@ -164,6 +173,9 @@
               />
             </div>
           </div>
+          <div class="date-arrow-right">
+            <img src="static/images/arrow-right.png" alt="右箭頭" />
+          </div>
         </div>
       </div>
       <div class="destination">
@@ -179,7 +191,7 @@
         <!-- 隱藏的下拉選單 -->
         <div class="city-dropdown">
           <ul class="city-list">
-            <li>台北市</li>
+            <li>臺北市</li>
             <li>新北市</li>
             <li>桃園市</li>
             <li>臺中市</li>
@@ -204,9 +216,15 @@
           </ul>
         </div>
         <div class="destination-forecast-days">
+          <div class="arrow-left">
+            <img src="static/images/arrow-left.png" alt="左箭頭" />
+          </div>
           <div class="destination-forecast-today active">20</div>
           <div class="destination-forecast-tomorrow">21</div>
           <div class="destination-forecast-day2">22</div>
+          <div class="arrow-right">
+            <img src="static/images/arrow-right.png" alt="右箭頭" />
+          </div>
         </div>
         <div class="current-time-text">現在時刻</div>
         <div class="destination-current-temperature">
@@ -239,17 +257,15 @@
           </div>
         </div>
         <div class="destination-periodic-weather">
+          <div class="date-arrow-left">
+            <img src="static/images/arrow-left.png" alt="左箭頭" />
+          </div>
           <div class="destination-weather-item active">
             <div class="destination-weather-time">14</div>
             <div class="destination-weather-icon">
-              <!-- <img
-                class="destination-hour1"
-                src="static/images/little-whitesun.png"
-                alt="destination-hour1"
-              /> -->
               <img
                 class="destination-hour1"
-                src="static/images/little-sun-highlight.png"
+                src="static/images/little-whitesun.png"
                 alt="destination-hour1"
               />
             </div>
@@ -293,6 +309,9 @@
                 alt="destination-hour5"
               />
             </div>
+          </div>
+          <div class="date-arrow-right">
+            <img src="static/images/arrow-right.png" alt="右箭頭" />
           </div>
         </div>
       </div>
