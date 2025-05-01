@@ -22,11 +22,16 @@ const bgColor = {
 };
 
 const weatherIcon = {
-  sunny: "/static/images/little-whitesun.png",
-  partlyCloudy: "/static/images/little-partly-cloudy.png",
-  cloudy: "/static/images/little-cloud.png",
-  thunderstorm: "/static/images/cloud-thunder.png",
-  rainy: "/static/images/rainfall.png",
+  sunny: "./static/images/little-whitesun.png",
+  bigSunny: "./static/images/big-sunny.png",
+  partlyCloudy: "./static/images/little-partly-cloudy.png",
+  bigPartlyCloudy: "./static/images/big-partly-cloudy.png",
+  cloudy: "./static/images/little-cloud.png",
+  bigCloudy: "./static/images/big-cloudy.png",
+  thunderstorm: "./static/images/cloud-thunder.png",
+  bigThunderstorm: "./static/images/big-thunderstorm.png",
+  rainy: "./static/images/rainfall.png",
+  bigRainy: "./static/images/big-rainy.png",
   findWeatherIcon(codeStr) {
     const code = Number(codeStr);
     if ((1 <= code && code <= 3) || (24 <= code && code <= 26))
@@ -42,16 +47,21 @@ const weatherIcon = {
       return this.thunderstorm;
     else return this.rainy;
   },
-  findBigWeatherIcon(littleIconSrc) {
-    const [a, path] = littleIconSrc.split("static");
-    const srcPath = "/static" + path;
-    if (srcPath === this.sunny) return "/static/images/big-sunny.png";
-    else if (srcPath === this.partlyCloudy)
-      return "/static/images/big-partly-cloudy.png";
-    else if (srcPath === this.cloudy) return "/static/images/big-cloudy.png";
-    else if (srcPath === this.thunderstorm)
-      return "/static/images/big-thunderstorm.png";
-    else return "/static/images/big-rainy.png";
+  findBigWeatherIcon(codeStr) {
+    const code = Number(codeStr);
+    if ((1 <= code && code <= 3) || (24 <= code && code <= 26))
+      return this.bigSunny;
+    else if ((4 <= code && code <= 5) || code === 27)
+      return this.bigPartlyCloudy;
+    else if ((6 <= code && code <= 7) || code === 28) return this.bigCloudy;
+    else if (
+      (15 <= code && code <= 18) ||
+      (21 <= code && code <= 22) ||
+      (33 <= code && code <= 36) ||
+      code === 41
+    )
+      return this.bigThunderstorm;
+    else return this.bigRainy;
   },
 };
 
@@ -356,8 +366,6 @@ const departureTimeView = {
       .clientWidth + 6, // deal with 3px border with animation
   render() {
     const data = this.data;
-    console.log("rendering...");
-    console.log(data);
     this.parentElement.innerHTML = "";
     const renderTimeData = data.weatherData; //.slice(0, 5); // testing
     renderTimeData.forEach((timeData) => {
@@ -369,7 +377,7 @@ const departureTimeView = {
       const iconEl = document.createElement("div");
       const icon = document.createElement("img");
       icon.src = weatherIcon.findWeatherIcon(timeData.weatherCode);
-      console.log(timeData.weatherCode, icon.src);
+      // console.log(timeData.weatherCode, icon.src);
       iconEl.appendChild(icon);
       timeItemEl.append(timeEl, iconEl);
       this.parentElement.appendChild(timeItemEl);
@@ -443,8 +451,6 @@ const destinationTimeView = {
     ).clientWidth + 6, // deal with 3px border with animation
   render() {
     const data = this.data;
-    console.log("rendering...");
-    console.log(data);
     this.parentElement.innerHTML = "";
     const renderTimeData = data.weatherData; //.slice(0, 5); // testing
     renderTimeData.forEach((timeData) => {
@@ -524,8 +530,10 @@ const backgroundView = {
 
 const bigIconView = {
   parentElement: document.querySelector(".bottom-weather-icons"),
-  changeIcon(departureBigIcon, destinationBigIcon) {
+  changeDepIcon(departureBigIcon) {
     this.parentElement.children[0].children[0].src = departureBigIcon;
+  },
+  changeDestIcon(destinationBigIcon) {
     this.parentElement.children[1].children[0].src = destinationBigIcon;
   },
 };
@@ -535,7 +543,7 @@ const controlUpdateData = async function () {
   try {
     const data = await getWeatherData();
     state.allLocData = data;
-    console.log(state.allLocData);
+    // console.log(state.allLocData);
   } catch (err) {
     console.error(err);
   }
@@ -557,7 +565,7 @@ const controlChangeDepLoc = function (clickedDist) {
   departureTimeView.render();
   departureTimeView.changeTime();
   changeBGColorUtil();
-  changeBigIconUtil();
+  changeDepBigIconUtil();
 };
 const controlChangeDepDate = function (clickedDate) {
   const clickedDateFirstData = state.departure.weatherData.find(
@@ -570,7 +578,7 @@ const controlChangeDepDate = function (clickedDate) {
   departureDetailView.render();
   departureTimeView.changeTime();
   changeBGColorUtil();
-  changeBigIconUtil();
+  changeDepBigIconUtil();
 };
 const controlChangeDepTime = function (clickedTimeEl) {
   const clickTimeElInde = Array.from(
@@ -585,7 +593,7 @@ const controlChangeDepTime = function (clickedTimeEl) {
   departureDateView.changeDate();
   departureDetailView.render();
   changeBGColorUtil();
-  changeBigIconUtil();
+  changeDepBigIconUtil();
 };
 const controlClickToScrollDepTimeList = function (direction) {
   departureTimeView.scroll(direction);
@@ -607,7 +615,7 @@ const controlChangeDestLoc = function (clickedDist) {
   destinationTimeView.render();
   destinationTimeView.changeTime();
   changeBGColorUtil();
-  changeBigIconUtil();
+  changeDestBigIconUtil();
 };
 const controlChangeDestDate = function (clickedDate) {
   const clickedDateFirstData = state.destination.weatherData.find(
@@ -620,7 +628,7 @@ const controlChangeDestDate = function (clickedDate) {
   destinationDetailView.render();
   destinationTimeView.changeTime();
   changeBGColorUtil();
-  changeBigIconUtil();
+  changeDestBigIconUtil();
 };
 const controlChangeDestTime = function (clickedTimeEl) {
   const clickTimeElInde = Array.from(
@@ -635,7 +643,7 @@ const controlChangeDestTime = function (clickedTimeEl) {
   destinationDateView.changeDate();
   destinationDetailView.render();
   changeBGColorUtil();
-  changeBigIconUtil();
+  changeDestBigIconUtil();
 };
 const controlClickToScrollDestTimeList = function (direction) {
   destinationTimeView.scroll(direction);
@@ -655,7 +663,7 @@ const controlInitDeparture = async function (locationName) {
   departureTimeView.data = state.departure;
   departureTimeView.render();
   changeBGColorUtil();
-  changeBigIconUtil();
+  changeDepBigIconUtil();
 };
 
 const controlInitDestination = async function (locationName) {
@@ -672,7 +680,7 @@ const controlInitDestination = async function (locationName) {
   destinationTimeView.data = state.destination;
   destinationTimeView.render();
   changeBGColorUtil();
-  changeBigIconUtil();
+  changeDestBigIconUtil();
 };
 
 const init = async function () {
@@ -796,16 +804,25 @@ function changeBGColorUtil() {
   backgroundView.changeBGColor(depColor, destColor);
 }
 
-function changeBigIconUtil() {
+function changeDepBigIconUtil() {
   const departureBigIcon = weatherIcon.findBigWeatherIcon(
-    document
-      .querySelector(".departure-weather-items>.active")
-      .querySelector("img").src
+    state.departure.weatherData.find(
+      (e) =>
+        e.date === state.departure.choosedDate &&
+        e.time === state.departure.choosedTime
+    ).weatherCode
   );
+
+  bigIconView.changeDepIcon(departureBigIcon);
+}
+
+function changeDestBigIconUtil() {
   const destinationBigIcon = weatherIcon.findBigWeatherIcon(
-    document
-      .querySelector(".destination-weather-items>.active")
-      .querySelector("img").src
+    state.destination.weatherData.find(
+      (e) =>
+        e.date === state.destination.choosedDate &&
+        e.time === state.destination.choosedTime
+    ).weatherCode
   );
-  bigIconView.changeIcon(departureBigIcon, destinationBigIcon);
+  bigIconView.changeDestIcon(destinationBigIcon);
 }
