@@ -22,7 +22,7 @@ body {
 @keyframes slideMainIn {
   0% {
     transform: translateY(-100px);
-    opacity: 0;
+    opacity: 1;
   }
   100% {
     transform: translateY(0);
@@ -38,11 +38,11 @@ body {
   padding-top: 120px;
   animation: slideMainIn 1s ease-out;
 }
-.maincontent > * {
+/* .maincontent > * {
   opacity: 0;
   animation: slideMainIn 1s ease-out forwards;
   animation-delay: 0.2s;
-}
+} */
 
 .departure-location,
 .destination-location {
