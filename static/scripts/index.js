@@ -42,6 +42,17 @@ const weatherIcon = {
       return this.thunderstorm;
     else return this.rainy;
   },
+  findBigWeatherIcon(littleIconSrc) {
+    const [a, path] = littleIconSrc.split("static");
+    const srcPath = "/static" + path;
+    if (srcPath === this.sunny) return "/static/images/big-sunny.png";
+    else if (srcPath === this.partlyCloudy)
+      return "/static/images/big-partly-cloudy.png";
+    else if (srcPath === this.cloudy) return "/static/images/big-cloudy.png";
+    else if (srcPath === this.thunderstorm)
+      return "/static/images/big-thunderstorm.png";
+    else return "/static/images/big-rainy.png";
+  },
 };
 
 const state = {
@@ -358,6 +369,7 @@ const departureTimeView = {
       const iconEl = document.createElement("div");
       const icon = document.createElement("img");
       icon.src = weatherIcon.findWeatherIcon(timeData.weatherCode);
+      console.log(timeData.weatherCode, icon.src);
       iconEl.appendChild(icon);
       timeItemEl.append(timeEl, iconEl);
       this.parentElement.appendChild(timeItemEl);
@@ -510,6 +522,14 @@ const backgroundView = {
   },
 };
 
+const bigIconView = {
+  parentElement: document.querySelector(".bottom-weather-icons"),
+  changeIcon(departureBigIcon, destinationBigIcon) {
+    this.parentElement.children[0].children[0].src = departureBigIcon;
+    this.parentElement.children[1].children[0].src = destinationBigIcon;
+  },
+};
+
 // Controller
 const controlUpdateData = async function () {
   try {
@@ -536,13 +556,8 @@ const controlChangeDepLoc = function (clickedDist) {
   departureTimeView.data = state.departure;
   departureTimeView.render();
   departureTimeView.changeTime();
-  const depColor = bgColor.findColorCode(
-    document.querySelector(".departure-temperature-value").textContent
-  );
-  const destColor = bgColor.findColorCode(
-    document.querySelector(".destination-temperature-value").textContent
-  );
-  backgroundView.changeBGColor(depColor, destColor);
+  changeBGColorUtil();
+  changeBigIconUtil();
 };
 const controlChangeDepDate = function (clickedDate) {
   const clickedDateFirstData = state.departure.weatherData.find(
@@ -554,6 +569,8 @@ const controlChangeDepDate = function (clickedDate) {
   departureDateView.changeDate();
   departureDetailView.render();
   departureTimeView.changeTime();
+  changeBGColorUtil();
+  changeBigIconUtil();
 };
 const controlChangeDepTime = function (clickedTimeEl) {
   const clickTimeElInde = Array.from(
@@ -567,6 +584,8 @@ const controlChangeDepTime = function (clickedTimeEl) {
   departureTimeView.changeTime();
   departureDateView.changeDate();
   departureDetailView.render();
+  changeBGColorUtil();
+  changeBigIconUtil();
 };
 const controlClickToScrollDepTimeList = function (direction) {
   departureTimeView.scroll(direction);
@@ -587,13 +606,8 @@ const controlChangeDestLoc = function (clickedDist) {
   destinationTimeView.data = state.destination;
   destinationTimeView.render();
   destinationTimeView.changeTime();
-  const depColor = bgColor.findColorCode(
-    document.querySelector(".departure-temperature-value").textContent
-  );
-  const destColor = bgColor.findColorCode(
-    document.querySelector(".destination-temperature-value").textContent
-  );
-  backgroundView.changeBGColor(depColor, destColor);
+  changeBGColorUtil();
+  changeBigIconUtil();
 };
 const controlChangeDestDate = function (clickedDate) {
   const clickedDateFirstData = state.destination.weatherData.find(
@@ -605,6 +619,8 @@ const controlChangeDestDate = function (clickedDate) {
   destinationDateView.changeDate();
   destinationDetailView.render();
   destinationTimeView.changeTime();
+  changeBGColorUtil();
+  changeBigIconUtil();
 };
 const controlChangeDestTime = function (clickedTimeEl) {
   const clickTimeElInde = Array.from(
@@ -618,6 +634,8 @@ const controlChangeDestTime = function (clickedTimeEl) {
   destinationTimeView.changeTime();
   destinationDateView.changeDate();
   destinationDetailView.render();
+  changeBGColorUtil();
+  changeBigIconUtil();
 };
 const controlClickToScrollDestTimeList = function (direction) {
   destinationTimeView.scroll(direction);
@@ -636,13 +654,8 @@ const controlInitDeparture = async function (locationName) {
   departureDateView.render();
   departureTimeView.data = state.departure;
   departureTimeView.render();
-  const depColor = bgColor.findColorCode(
-    document.querySelector(".departure-temperature-value").textContent
-  );
-  const destColor = bgColor.findColorCode(
-    document.querySelector(".destination-temperature-value").textContent
-  );
-  backgroundView.changeBGColor(depColor, destColor);
+  changeBGColorUtil();
+  changeBigIconUtil();
 };
 
 const controlInitDestination = async function (locationName) {
@@ -658,13 +671,8 @@ const controlInitDestination = async function (locationName) {
   destinationDateView.render();
   destinationTimeView.data = state.destination;
   destinationTimeView.render();
-  const depColor = bgColor.findColorCode(
-    document.querySelector(".departure-temperature-value").textContent
-  );
-  const destColor = bgColor.findColorCode(
-    document.querySelector(".destination-temperature-value").textContent
-  );
-  backgroundView.changeBGColor(depColor, destColor);
+  changeBGColorUtil();
+  changeBigIconUtil();
 };
 
 const init = async function () {
@@ -776,4 +784,28 @@ function normalizeWeatherData(rawData) {
   });
 
   return output;
+}
+
+function changeBGColorUtil() {
+  const depColor = bgColor.findColorCode(
+    document.querySelector(".departure-temperature-value").textContent
+  );
+  const destColor = bgColor.findColorCode(
+    document.querySelector(".destination-temperature-value").textContent
+  );
+  backgroundView.changeBGColor(depColor, destColor);
+}
+
+function changeBigIconUtil() {
+  const departureBigIcon = weatherIcon.findBigWeatherIcon(
+    document
+      .querySelector(".departure-weather-items>.active")
+      .querySelector("img").src
+  );
+  const destinationBigIcon = weatherIcon.findBigWeatherIcon(
+    document
+      .querySelector(".destination-weather-items>.active")
+      .querySelector("img").src
+  );
+  bigIconView.changeIcon(departureBigIcon, destinationBigIcon);
 }
