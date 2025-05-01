@@ -1,6 +1,6 @@
 from fastapi import APIRouter,status,Form
 from fastapi.responses import JSONResponse,FileResponse
-import os,httpx,json
+import os,uuid,httpx,json
 from . import saveImage
 
 discordrouter = APIRouter()
