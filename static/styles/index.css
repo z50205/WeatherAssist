@@ -327,10 +327,11 @@ body {
 
 .departure-weather-item.active,
 .destination-weather-item.active {
-  border: 1px solid white;
+  outline: 1px solid white;
+  outline-offset: -2px;
   border-radius: 50px;
   background-color: transparent;
-  animation: pulse-border 0.3s ease-out;
+  animation: pulse-border 0.15s linear;
 }
 
 @keyframes pulse-border {
