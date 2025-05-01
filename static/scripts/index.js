@@ -22,20 +22,21 @@ const bgColor = {
 };
 
 const weatherIcon = {
-  sunny: "",
-  partlyCloudy: "",
-  cloudy: "",
-  thunderstorm: "",
-  rainy: "",
+  sunny: "/static/images/little-whitesun.png",
+  partlyCloudy: "/static/images/little-partly-cloudy.png",
+  cloudy: "/static/images/little-cloud.png",
+  thunderstorm: "/static/images/cloud-thunder.png",
+  rainy: "/static/images/rainfall.png",
   findWeatherIcon(codeStr) {
     const code = Number(codeStr);
-    if (1 <= code <= 3 || 24 <= code <= 26) return this.sunny;
-    else if (4 <= code <= 5 || code === 27) return this.partlyCloudy;
-    else if (6 <= code <= 7 || code === 28) return this.cloudy;
+    if ((1 <= code && code <= 3) || (24 <= code && code <= 26))
+      return this.sunny;
+    else if ((4 <= code && code <= 5) || code === 27) return this.partlyCloudy;
+    else if ((6 <= code && code <= 7) || code === 28) return this.cloudy;
     else if (
-      15 <= code <= 18 ||
-      21 <= code <= 22 ||
-      33 <= code <= 36 ||
+      (15 <= code && code <= 18) ||
+      (21 <= code && code <= 22) ||
+      (33 <= code && code <= 36) ||
       code === 41
     )
       return this.thunderstorm;
@@ -99,6 +100,12 @@ const getWeatherData = async function () {
     data.forEach((locData) => {
       const normalizeLocData = normalizeWeatherData(locData.weatherData);
       locData.weatherData = normalizeLocData;
+      const startFrom = locData.weatherData.find(
+        (e) => e.time.substring(0, 2) == String(now.getHours()).padStart(2, "0")
+      );
+      locData.weatherData = locData.weatherData.slice(
+        locData.weatherData.indexOf(startFrom)
+      );
     });
     return data;
   } catch (err) {
@@ -181,10 +188,12 @@ const departureDateView = {
     this.parentElement.querySelector(".departure-forecast-day2").textContent =
       day2.slice(-2);
   },
-  changeDate(newDate) {
+  changeDate() {
+    console.log(this.data.choosedDate);
     for (let el of this.parentElement.children) {
       el.classList.remove("active");
-      if (el.textContent === newDate) el.classList.add("active");
+      if (el.textContent === this.data.choosedDate.slice(-2))
+        el.classList.add("active");
     }
   },
   addHandlerClickDate(handler) {
@@ -213,10 +222,11 @@ const destinationDateView = {
     this.parentElement.querySelector(".destination-forecast-day2").textContent =
       day2.slice(-2);
   },
-  changeDate(newDate) {
+  changeDate() {
     for (let el of this.parentElement.children) {
       el.classList.remove("active");
-      if (el.textContent === newDate) el.classList.add("active");
+      if (el.textContent === this.data.choosedDate.slice(-2))
+        el.classList.add("active");
     }
   },
   addHandlerClickDate(handler) {
@@ -337,8 +347,47 @@ const departureTimeView = {
   render() {
     const data = this.data;
     console.log("rendering...");
-    console.log(data.weatherData);
-    console.log(data.weatherData.filter((e) => e.date === data.choosedDate));
+    console.log(data);
+    this.parentElement.innerHTML = "";
+    const renderTimeData = data.weatherData; //.slice(0, 5); // testing
+    renderTimeData.forEach((timeData) => {
+      const timeItemEl = document.createElement("div");
+      timeItemEl.classList.add("departure-weather-item");
+      const timeEl = document.createElement("div");
+      timeEl.classList.add("departure-weather-time");
+      timeEl.textContent = timeData.time.substring(0, 2);
+      const iconEl = document.createElement("div");
+      const icon = document.createElement("img");
+      icon.src = weatherIcon.findWeatherIcon(timeData.weatherCode);
+      iconEl.appendChild(icon);
+      timeItemEl.append(timeEl, iconEl);
+      this.parentElement.appendChild(timeItemEl);
+    });
+    // add active class
+    const choosedTimeWeatherIndex = renderTimeData.findIndex(
+      (e) => e.time === data.choosedTime
+    );
+    this.parentElement.children[choosedTimeWeatherIndex].classList.add(
+      "active"
+    );
+  },
+  changeTime() {
+    for (let el of this.parentElement.children) {
+      el.classList.remove("active");
+    }
+    const i = this.data.weatherData.findIndex(
+      (e) =>
+        e.date === this.data.choosedDate && e.time === this.data.choosedTime
+    );
+    console.log(i);
+    this.parentElement.children[i].classList.add("active");
+  },
+
+  addHandlerClickTime(handler) {
+    this.parentElement.addEventListener("click", (e) => {
+      const clickedItem = e.target.closest(".departure-weather-item");
+      if (clickedItem !== null) handler(clickedItem);
+    });
   },
 };
 
@@ -380,6 +429,7 @@ const controlChangeDepLoc = function (clickedDist) {
   ).weatherData;
   departureDetailView.data = state.departure;
   departureDetailView.render();
+  departureTimeView.render();
   const depColor = bgColor.findColorCode(
     document.querySelector(".departure-temperature-value").textContent
   );
@@ -389,13 +439,25 @@ const controlChangeDepLoc = function (clickedDist) {
   backgroundView.changeBGColor(depColor, destColor);
 };
 const controlChangeDepDate = function (clickedDate) {
-  departureDateView.changeDate(clickedDate);
   const clickedDateFirstData = state.departure.weatherData.find(
     (e) => e.date.slice(-2) === clickedDate
   );
   state.departure.choosedDate = clickedDateFirstData.date;
   state.departure.choosedTime = clickedDateFirstData.time;
   departureDetailView.data = state.departure;
+  departureDateView.changeDate();
+  departureDetailView.render();
+};
+const controlChangeDepTime = function (clickedTimeEl) {
+  const clickTimeElInde = Array.from(
+    document.querySelector(".departure-periodic-weather").children
+  ).findIndex((e) => e === clickedTimeEl);
+  const clickedTimeData = state.departure.weatherData[clickTimeElInde];
+  console.log(clickedTimeData);
+  state.departure.choosedDate = clickedTimeData.date;
+  state.departure.choosedTime = clickedTimeData.time;
+  departureDetailView.data = state.departure;
+  departureTimeView.changeTime();
   departureDetailView.render();
 };
 
@@ -419,26 +481,21 @@ const controlChangeDestLoc = function (clickedDist) {
   backgroundView.changeBGColor(depColor, destColor);
 };
 const controlChangeDestDate = function (clickedDate) {
-  destinationDateView.changeDate(clickedDate);
   const clickedDateFirstData = state.destination.weatherData.find(
     (e) => e.date.slice(-2) === clickedDate
   );
   state.destination.choosedDate = clickedDateFirstData.date;
   state.destination.choosedTime = clickedDateFirstData.time;
   destinationDetailView.data = state.destination;
+  destinationDateView.changeDate();
   destinationDetailView.render();
 };
 
 const controlInitDeparture = async function (locationName) {
   const location = locationName || "臺北市"; // 預設顯示台北市的資料
   const renderData = state.allLocData.find((e) => e.location === location);
-  const startFrom = renderData.weatherData.find(
-    (e) => e.time.substring(0, 2) == String(now.getHours()).padStart(2, "0")
-  );
   state.departure.location = location;
-  state.departure.weatherData = renderData.weatherData.slice(
-    renderData.weatherData.indexOf(startFrom)
-  );
+  state.departure.weatherData = renderData.weatherData;
   state.departure.choosedDate = state.departure.weatherData[0].date;
   state.departure.choosedTime = state.departure.weatherData[0].time;
   departureDetailView.data = state.departure;
@@ -484,13 +541,13 @@ const controlInitDestination = async function (locationName) {
 const init = async function () {
   await controlUpdateData();
   // 初始資料
-  let favoriteController = new FavoriteController(
-    new FavoriteModel(),
-    new FavoriteView()
-  );
-  favoriteController.init();
-  state.departure.location = favoriteController.model.departure;
-  state.destination.location = favoriteController.model.destination;
+  // let favoriteController = new FavoriteController(
+  //   new FavoriteModel(),
+  //   new FavoriteView()
+  // );
+  // favoriteController.init();
+  // state.departure.location = favoriteController.model.departure;
+  // state.destination.location = favoriteController.model.destination;
   controlInitDeparture(state.departure.location);
   controlInitDestination(state.destination.location);
   // 選取地點
@@ -501,6 +558,8 @@ const init = async function () {
   // 選取日期
   departureDateView.addHandlerClickDate(controlChangeDepDate);
   destinationDateView.addHandlerClickDate(controlChangeDestDate);
+  // 選取時間
+  departureTimeView.addHandlerClickTime(controlChangeDepTime);
 };
 
 init();
