@@ -60,6 +60,7 @@ Via the backend server, enable automated webpage screenshots to be sent to Disco
   - 前端
     - Email轉發API設計
     - 截圖API設計
+    - Favorite站點記憶
     - popup視窗MVC設計
   - 後端
     - Email轉發API
