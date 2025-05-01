@@ -43,7 +43,15 @@ class FavoriteModel{
         this.departure=departure;
         this.destination=destination;
         this.favoriteToggle=true;
-        localStorage.setItem("FAVORITE",JSON.stringify([departure,destination]))
+        localStorage.setItem("FAVORITE",JSON.stringify([this.departure,this.destination]))
+    }
+    setDepartureFavorite(departure){
+        this.departure=departure;
+        localStorage.setItem("FAVORITE",JSON.stringify([this.departure,this.destination]))
+    }
+    setDestinationFavorite(destination){
+        this.destination=destination;
+        localStorage.setItem("FAVORITE",JSON.stringify([this.departure,this.destination]))
     }
     removeFavorite(){
         localStorage.removeItem("FAVORITE");
@@ -124,8 +132,12 @@ class LinkView{
         if(show){
             html2canvas(document.body)
             .then(canvas => {shotImg.src = canvas.toDataURL("image/png");})
-            .then(()=>{this.overlayDiv.style.display="block";
-                this.popWindowDiv.style.display="block";});
+            .then(()=>{
+                setTimeout(()=> {
+                    this.popWindowDiv.classList.add("show");
+                  }, 10);
+                this.popWindowDiv.style.display="block";
+                this.overlayDiv.style.display="block";});
         }else{
             this.overlayDiv.style.display="none";
             this.popWindowDiv.style.display="none";
