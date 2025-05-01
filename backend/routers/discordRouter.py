@@ -2,24 +2,25 @@ from fastapi import APIRouter,status,Form
 from fastapi.responses import JSONResponse,FileResponse
 import os,uuid,httpx,json
 from jinja2 import Template
+from . import saveImage
 
 discordrouter = APIRouter()
 
-template_path = os.path.join(os.path.dirname(__file__), "template.html")
-with open(template_path, "r") as file:
-    template_str = file.read()
-jinja_template = Template(template_str)
+# template_path = os.path.join(os.path.dirname(__file__), "template.html")
+# with open(template_path, "r") as file:
+#     template_str = file.read()
+# jinja_template = Template(template_str)
 
 # 輸入Image圖檔資料，輸出存檔的檔名，供輸出文檔調用。
-def saveImage(image):
-    try:
-        file_path = os.path.join(os.path.dirname(__file__), "emailImage")
-        file_name = str(uuid.uuid4()) + ".png"
-        with open(os.path.join(file_path, file_name), "wb") as f:
-            f.write(image.file.read())
-            return file_name
-    except Exception as e:
-        print(e)
+# def saveImage(image):
+#     try:
+#         file_path = os.path.join(os.path.dirname(__file__), "emailImage")
+#         file_name = str(uuid.uuid4()) + ".png"
+#         with open(os.path.join(file_path, file_name), "wb") as f:
+#             f.write(image.file.read())
+#             return file_name
+#     except Exception as e:
+#         print(e)
         
     
 @discordrouter.post("/api/webhook")
@@ -34,8 +35,8 @@ async def post_weather(
   try :
     if image:
       file_name=saveImage(image)
-      BACKEND_IP="http://127.0.0.1:8000"
-      # BACKEND_IP = "https://bizara.link"
+      # BACKEND_IP="http://127.0.0.1:8000"
+      BACKEND_IP = "https://bizara.link"
       image_url = f"{BACKEND_IP}/api/webhook/{file_name}"
 
       payload = {
