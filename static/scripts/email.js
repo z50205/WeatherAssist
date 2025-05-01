@@ -130,6 +130,10 @@ class LinkView{
     }
     showLink(show){
         if(show){
+            const elements = document.querySelectorAll('.animated-text');
+            elements.forEach(element => {
+                element.classList.remove("animated-text");
+              });
             html2canvas(document.body)
             .then(canvas => {shotImg.src = canvas.toDataURL("image/png");})
             .then(()=>{
@@ -137,7 +141,13 @@ class LinkView{
                     this.popWindowDiv.classList.add("show");
                   }, 10);
                 this.popWindowDiv.style.display="block";
-                this.overlayDiv.style.display="block";});
+                this.overlayDiv.style.display="block";
+                elements.forEach(element => {
+                    element.classList.add("animated-text");
+                  }
+                );
+            }
+            );
         }else{
             this.overlayDiv.style.display="none";
             this.popWindowDiv.style.display="none";
