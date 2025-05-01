@@ -26,12 +26,16 @@
             class="webhook-input"
             placeholder="請輸入 Discord Webbook"
           />
-          <button type="button" class="submit-btn">發送</button>
+          <button type="button" class="submit-btn">
+            <span>發送</span>
+          </button>
         </div>
         <div class="email-input-wrapper">
           <img src="static/images/email-icon.png" alt="email icon" />
           <input type="text" class="email-input" placeholder="請輸入 Email" />
-          <button type="button" class="submit-btn">發送</button>
+          <button type="button" class="submit-btn">
+            <span>發送</span>
+          </button>
         </div>
       </div>
     </div>
@@ -59,7 +63,7 @@
           </div>
         </div>
         <!-- 隱藏的下拉選單 -->
-        <div class="city-dropdown">
+        <div class="city-dropdown hidden">
           <ul class="city-list">
             <li>臺北市</li>
             <li>新北市</li>
@@ -86,20 +90,14 @@
           </ul>
         </div>
         <div class="departure-forecast-days">
-          <div class="arrow-left">
-            <img src="static/images/arrow-left.png" alt="左箭頭" />
-          </div>
-          <div class="departure-forecast-today active">20</div>
-          <div class="departure-forecast-tomorrow">21</div>
-          <div class="departure-forecast-day2">22</div>
-          <div class="arrow-right">
-            <img src="static/images/arrow-right.png" alt="右箭頭" />
-          </div>
+          <div class="departure-forecast-day active">20</div>
+          <div class="departure-forecast-day">21</div>
+          <div class="departure-forecast-day">22</div>
         </div>
         <div class="current-time-text">現在時刻</div>
         <div class="departure-current-temperature">
-          <div class="departure-temperature-value">25</div>
-          <div class="departure-temperature-unit">°C</div>
+          <div class="departure-temperature-value animated-text">25</div>
+          <div class="departure-temperature-unit animated-text">°C</div>
         </div>
         <div class="departure-temperature-range">
           <div class="temperature-image">
@@ -120,60 +118,92 @@
           <div class="rain-probability-symbol">%</div>
         </div>
         <div class="departure-periodic-weather">
-          <div class="date-arrow-left">
+          <div class="time-arrow-left">
             <img src="static/images/arrow-left.png" alt="左箭頭" />
           </div>
-          <div class="departure-weather-item active">
-            <div class="departure-weather-time">14</div>
-            <div class="departure-weather-icon">
-              <img
-                class="departure-hour1"
-                src="static/images/little-whitesun.png"
-                alt="departure-hour1"
-              />
+          <div class="departure-weather-items">
+            <div class="departure-weather-item active">
+              <div class="departure-weather-time">14</div>
+              <div class="departure-weather-icon">
+                <img
+                  class="departure-hour1"
+                  src="static/images/little-whitesun.png"
+                  alt="departure-hour1"
+                />
+              </div>
+            </div>
+            <div class="departure-weather-item">
+              <div class="departure-weather-time">15</div>
+              <div class="departure-weather-icon">
+                <img
+                  class="departure-hour2"
+                  src="static/images/rainfall.png"
+                  alt="departure-hour2"
+                />
+              </div>
+            </div>
+            <div class="departure-weather-item">
+              <div class="departure-weather-time">16</div>
+              <div class="departure-weather-icon">
+                <img
+                  class="departure-hour3"
+                  src="static/images/little-partly-cloudy.png"
+                  alt="departure-hour3"
+                />
+              </div>
+            </div>
+            <div class="departure-weather-item">
+              <div class="departure-weather-time">17</div>
+              <div class="departure-weather-icon">
+                <img
+                  class="departure-hour4"
+                  src="static/images/cloud-thunder.png"
+                  alt="departure-hour4"
+                />
+              </div>
+            </div>
+            <div class="departure-weather-item">
+              <div class="departure-weather-time">18</div>
+              <div class="departure-weather-icon">
+                <img
+                  class="departure-hour5"
+                  src="static/images/little-cloud.png"
+                  alt="departure-hour5"
+                />
+              </div>
+            </div>
+            <div class="departure-weather-item">
+              <div class="departure-weather-time">19</div>
+              <div class="departure-weather-icon">
+                <img
+                  class="departure-hour6"
+                  src="static/images/rainfall.png"
+                  alt="departure-hour6"
+                />
+              </div>
+            </div>
+            <div class="departure-weather-item">
+              <div class="departure-weather-time">20</div>
+              <div class="departure-weather-icon">
+                <img
+                  class="departure-hour7"
+                  src="static/images/rainfall.png"
+                  alt="departure-hour7"
+                />
+              </div>
+            </div>
+            <div class="departure-weather-item">
+              <div class="departure-weather-time">21</div>
+              <div class="departure-weather-icon">
+                <img
+                  class="departure-hour8"
+                  src="static/images/rainfall.png"
+                  alt="departure-hour8"
+                />
+              </div>
             </div>
           </div>
-          <div class="departure-weather-item">
-            <div class="departure-weather-time">15</div>
-            <div class="departure-weather-icon">
-              <img
-                class="departure-hour2"
-                src="static/images/rainfall.png"
-                alt="departure-hour2"
-              />
-            </div>
-          </div>
-          <div class="departure-weather-item">
-            <div class="departure-weather-time">16</div>
-            <div class="departure-weather-icon">
-              <img
-                class="departure-hour3"
-                src="static/images/little-partly-cloudy.png"
-                alt="departure-hour3"
-              />
-            </div>
-          </div>
-          <div class="departure-weather-item">
-            <div class="departure-weather-time">17</div>
-            <div class="departure-weather-icon">
-              <img
-                class="departure-hour4"
-                src="static/images/cloud-thunder.png"
-                alt="departure-hour4"
-              />
-            </div>
-          </div>
-          <div class="departure-weather-item">
-            <div class="departure-weather-time">18</div>
-            <div class="departure-weather-icon">
-              <img
-                class="departure-hour5"
-                src="static/images/little-cloud.png"
-                alt="departure-hour5"
-              />
-            </div>
-          </div>
-          <div class="date-arrow-right">
+          <div class="time-arrow-right">
             <img src="static/images/arrow-right.png" alt="右箭頭" />
           </div>
         </div>
@@ -189,7 +219,7 @@
           </div>
         </div>
         <!-- 隱藏的下拉選單 -->
-        <div class="city-dropdown">
+        <div class="city-dropdown hidden">
           <ul class="city-list">
             <li>臺北市</li>
             <li>新北市</li>
@@ -216,21 +246,15 @@
           </ul>
         </div>
         <div class="destination-forecast-days">
-          <div class="arrow-left">
-            <img src="static/images/arrow-left.png" alt="左箭頭" />
-          </div>
-          <div class="destination-forecast-today active">20</div>
-          <div class="destination-forecast-tomorrow">21</div>
-          <div class="destination-forecast-day2">22</div>
-          <div class="arrow-right">
-            <img src="static/images/arrow-right.png" alt="右箭頭" />
-          </div>
+          <div class="destination-forecast-day active">20</div>
+          <div class="destination-forecast-day">21</div>
+          <div class="destination-forecast-day">22</div>
         </div>
         <div class="current-time-text">現在時刻</div>
         <div class="destination-current-temperature">
-          <div class="destination-temperature-value">15</div>
-          <div class="destination-temperature-unit">°C</div>
-          <div class="temp-change-brackets">-10</div>
+          <div class="destination-temperature-value animated-text">15</div>
+          <div class="destination-temperature-unit animated-text">°C</div>
+          <div class="temp-change-brackets animated-text">-10</div>
         </div>
         <div class="destination-temperature-range">
           <div class="temperature-image">
@@ -257,60 +281,92 @@
           </div>
         </div>
         <div class="destination-periodic-weather">
-          <div class="date-arrow-left">
+          <div class="time-arrow-left">
             <img src="static/images/arrow-left.png" alt="左箭頭" />
           </div>
-          <div class="destination-weather-item active">
-            <div class="destination-weather-time">14</div>
-            <div class="destination-weather-icon">
-              <img
-                class="destination-hour1"
-                src="static/images/little-whitesun.png"
-                alt="destination-hour1"
-              />
+          <div class="destination-weather-items">
+            <div class="destination-weather-item active">
+              <div class="destination-weather-time">14</div>
+              <div class="destination-weather-icon">
+                <img
+                  class="destination-hour1"
+                  src="static/images/little-whitesun.png"
+                  alt="destination-hour1"
+                />
+              </div>
+            </div>
+            <div class="destination-weather-item">
+              <div class="destination-weather-time">15</div>
+              <div class="destination-weather-icon">
+                <img
+                  class="destination-hour2"
+                  src="static/images/little-whitesun.png"
+                  alt="destination-hour2"
+                />
+              </div>
+            </div>
+            <div class="destination-weather-item">
+              <div class="destination-weather-time">16</div>
+              <div class="destination-weather-icon">
+                <img
+                  class="destination-hour3"
+                  src="static/images/little-whitesun.png"
+                  alt="destination-hour3"
+                />
+              </div>
+            </div>
+            <div class="destination-weather-item">
+              <div class="destination-weather-time">17</div>
+              <div class="destination-weather-icon">
+                <img
+                  class="destination-hour4"
+                  src="static/images/little-whitesun.png"
+                  alt="destination-hour4"
+                />
+              </div>
+            </div>
+            <div class="destination-weather-item">
+              <div class="destination-weather-time">18</div>
+              <div class="destination-weather-icon">
+                <img
+                  class="destination-hour5"
+                  src="static/images/little-whitesun.png"
+                  alt="destination-hour5"
+                />
+              </div>
+            </div>
+            <div class="destination-weather-item">
+              <div class="destination-weather-time">19</div>
+              <div class="destination-weather-icon">
+                <img
+                  class="destination-hour6"
+                  src="static/images/little-whitesun.png"
+                  alt="destination-hour6"
+                />
+              </div>
+            </div>
+            <div class="destination-weather-item">
+              <div class="destination-weather-time">20</div>
+              <div class="destination-weather-icon">
+                <img
+                  class="destination-hour7"
+                  src="static/images/little-whitesun.png"
+                  alt="destination-hour7"
+                />
+              </div>
+            </div>
+            <div class="destination-weather-item">
+              <div class="destination-weather-time">21</div>
+              <div class="destination-weather-icon">
+                <img
+                  class="destination-hour8"
+                  src="static/images/little-whitesun.png"
+                  alt="destination-hour8"
+                />
+              </div>
             </div>
           </div>
-          <div class="destination-weather-item">
-            <div class="destination-weather-time">15</div>
-            <div class="destination-weather-icon">
-              <img
-                class="destination-hour2"
-                src="static/images/little-whitesun.png"
-                alt="destination-hour2"
-              />
-            </div>
-          </div>
-          <div class="destination-weather-item">
-            <div class="destination-weather-time">16</div>
-            <div class="destination-weather-icon">
-              <img
-                class="destination-hour3"
-                src="static/images/little-whitesun.png"
-                alt="destination-hour3"
-              />
-            </div>
-          </div>
-          <div class="destination-weather-item">
-            <div class="destination-weather-time">17</div>
-            <div class="destination-weather-icon">
-              <img
-                class="destination-hour4"
-                src="static/images/little-whitesun.png"
-                alt="destination-hour4"
-              />
-            </div>
-          </div>
-          <div class="destination-weather-item">
-            <div class="destination-weather-time">18</div>
-            <div class="destination-weather-icon">
-              <img
-                class="destination-hour5"
-                src="static/images/little-whitesun.png"
-                alt="destination-hour5"
-              />
-            </div>
-          </div>
-          <div class="date-arrow-right">
+          <div class="time-arrow-right">
             <img src="static/images/arrow-right.png" alt="右箭頭" />
           </div>
         </div>
