@@ -1,16 +1,7 @@
-let webhook_BACKEND_IP="http://127.0.0.1:8000";
-// let webhook_BACKEND_IP="https://bizara.link"
-const webhook_linkBtn=document.getElementsByClassName("attach-button")[0];
+let webhook_BACKEND_IP="https://bizara.link"
 const webhook_hookBtns = document.getElementsByClassName("submit-btn");
 const webhookBtn = webhook_hookBtns[0];
 let webhook_shotImg=document.getElementById("screenShot")
-
-// 只要點擊連結的link就會觸發截圖功能，並將截圖存在shotImg裡面
-webhook_linkBtn.addEventListener("click",()=>{
-  html2canvas(document.body).then(canvas => {
-    webhook_shotImg.src = canvas.toDataURL("image/png");
-  });
-})
 
 webhookBtn.addEventListener("click",async (event)=>{
   event.preventDefault();
