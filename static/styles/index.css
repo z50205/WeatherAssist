@@ -441,11 +441,11 @@ footer {
   align-items: center;
   text-align: center;
   width: auto;
-  height: 150px;
-  margin-top: auto;
+  height: 100px;
+  margin-top: 60px;
   padding-top: 0;
-  padding-bottom: 30px;
   background-color: #5b5b5b;
+  flex-shrink: 0;
 }
 
 .footer-text {
@@ -476,7 +476,7 @@ footer {
   display: none;
   background-color: #ffffff;
   position: fixed;
-  width: 400px;
+  width: 310px;
   height: 150px;
   top: 45%;
   left: 50%;
@@ -517,7 +517,7 @@ footer {
 .email-input-wrapper {
   display: flex;
   align-items: center;
-  gap: 17px;
+  gap: 10px;
   height: 30px;
   margin-bottom: 15px;
 }
@@ -658,20 +658,19 @@ footer {
 
   .maincontent {
     display: flex;
-    justify-content: center;
     flex-direction: column;
     align-items: center;
-    width: 80%;
-    margin: 0 auto;
-    padding-top: 30px;
+    padding: 60px 20px 20px 20px;
   }
 
   .departure {
     width: 100%;
+    max-width: 360px;
     margin-bottom: 100px;
   }
   .destination {
     width: 100%;
+    max-width: 360px;
     margin-bottom: 50px;
   }
 
@@ -820,45 +819,6 @@ footer {
   footer {
     height: 150px;
     padding-bottom: 0;
-  }
-
-  /* popup window */
-  .popup-window {
-    margin: 0 auto;
-    width: 80%;
-    height: 150px;
-  }
-
-  .close-button {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    border: none;
-    background: none;
-    cursor: pointer;
-  }
-
-  .close-button img {
-    width: 17px;
-    height: auto;
-  }
-
-  .popup-content {
-    margin: 15px 10px 10px 13px;
-  }
-
-  .popup-title {
-    width: 200px;
-    height: 20px;
-    font-size: 17px;
-    margin-bottom: 15px;
-  }
-
-  .dc-webhook-wrapper,
-  .email-input-wrapper {
-    gap: 10px;
-
-    margin-bottom: 15px;
   }
 
   .dc-webhook-wrapper img {
