@@ -95,7 +95,7 @@ const getWeatherData = async function () {
       };
       data.push(obj);
     }
-
+    // console.log(data);
     data.forEach((locData) => {
       const normalizeLocData = normalizeWeatherData(locData.weatherData);
       locData.weatherData = normalizeLocData;
@@ -333,9 +333,12 @@ const destinationDetailView = {
 // 時間選取區塊
 const departureTimeView = {
   data: null,
-  parentElement: null,
+  parentElement: document.querySelector(".departure-periodic-weather"),
   render() {
     const data = this.data;
+    console.log("rendering...");
+    console.log(data.weatherData);
+    console.log(data.weatherData.filter((e) => e.date === data.choosedDate));
   },
 };
 
@@ -442,6 +445,8 @@ const controlInitDeparture = async function (locationName) {
   departureDetailView.render();
   departureDateView.data = state.departure;
   departureDateView.render();
+  departureTimeView.data = state.departure;
+  departureTimeView.render();
   const depColor = bgColor.findColorCode(
     document.querySelector(".departure-temperature-value").textContent
   );
@@ -479,6 +484,13 @@ const controlInitDestination = async function (locationName) {
 const init = async function () {
   await controlUpdateData();
   // 初始資料
+  let favoriteController = new FavoriteController(
+    new FavoriteModel(),
+    new FavoriteView()
+  );
+  favoriteController.init();
+  state.departure.location = favoriteController.model.departure;
+  state.destination.location = favoriteController.model.destination;
   controlInitDeparture(state.departure.location);
   controlInitDestination(state.destination.location);
   // 選取地點
@@ -518,9 +530,8 @@ function normalizeWeatherData(rawData) {
 
   const output = temperatureEntry.Time.map((tempItem) => {
     const time = new Date(tempItem.DataTime);
-    const dateStr = time.toISOString().slice(0, 10);
-    const timeStr = time.toTimeString().slice(0, 8);
-    const datetimeISO = time.toISOString();
+    const [dateStr, timeWithZone] = tempItem.DataTime.split("T");
+    const timeStr = timeWithZone.split("+")[0];
 
     // 幫助函式：判斷某個時間是否在區段內
     const isInRange = (target, start, end) => {
