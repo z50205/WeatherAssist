@@ -136,6 +136,7 @@ class LinkView{
                 setTimeout(()=> {
                     this.popWindowDiv.classList.add("show");
                   }, 10);
+                this.popWindowDiv.style.display="block";
                 this.overlayDiv.style.display="block";});
         }else{
             this.overlayDiv.style.display="none";
