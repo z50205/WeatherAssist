@@ -398,23 +398,32 @@ const departureTimeView = {
       (e) =>
         e.date === this.data.choosedDate && e.time === this.data.choosedTime
     );
-    this.parentElement.children[i].classList.add("active");
-    console.log(
-      i,
-      this.itemWidth,
-      this.parentElement.children[3],
-      this.parentElement.children[3].clientWidth,
-      (this.itemWidth + 5) * (i - 2)
-    );
+    const choosedTimeItem = this.parentElement.children[i];
+    choosedTimeItem.classList.add("active");
+    // console.log(
+    //   i,
+    //   choosedTimeItem.clientWidth,
+    //   choosedTimeItem.offsetWidth,
+    //   (this.itemWidth + 5) * (i - 2),
+    //   choosedTimeItem.offsetLeft - choosedTimeItem.offsetWidth * 2,
+    //   choosedTimeItem.offsetLeft +
+    //     choosedTimeItem.offsetWidth / 2 -
+    //     this.parentElement.clientWidth / 2
+    // );
+    // item.offsetLeft + item.offsetWidth / 2 - parent.clientWidth / 2;
     this.parentElement.scrollTo({
-      left: (this.itemWidth + 5) * (i - 2),
+      left:
+        choosedTimeItem.offsetLeft +
+        choosedTimeItem.offsetWidth / 2 -
+        this.parentElement.offsetWidth / 2,
     });
   },
   scroll(direction) {
+    const itemClientWidth = this.parentElement.children[0].clientWidth;
     if (direction === "left") {
-      this.parentElement.scrollLeft -= 216;
+      this.parentElement.scrollLeft -= (itemClientWidth + 5) * 3;
     } else {
-      this.parentElement.scrollLeft += 216;
+      this.parentElement.scrollLeft += (itemClientWidth + 5) * 3;
     }
   },
 
@@ -482,23 +491,28 @@ const destinationTimeView = {
       (e) =>
         e.date === this.data.choosedDate && e.time === this.data.choosedTime
     );
-    this.parentElement.children[i].classList.add("active");
-    console.log(
-      i,
-      this.itemWidth,
-      this.parentElement.children[3],
-      this.parentElement.children[3].clientWidth,
-      (this.itemWidth + 5) * (i - 2)
-    );
+    const choosedTimeItem = this.parentElement.children[i];
+    choosedTimeItem.classList.add("active");
+    // console.log(
+    //   i,
+    //   choosedTimeItem.clientWidth,
+    //   choosedTimeItem.offsetWidth,
+    //   (this.itemWidth + 5) * (i - 2),
+    //   choosedTimeItem.offsetLeft
+    // );
     this.parentElement.scrollTo({
-      left: (this.itemWidth + 5) * (i - 2),
+      left:
+        choosedTimeItem.offsetLeft +
+        choosedTimeItem.offsetWidth / 2 -
+        this.parentElement.offsetWidth / 2,
     });
   },
   scroll(direction) {
+    const itemClientWidth = this.parentElement.children[0].clientWidth;
     if (direction === "left") {
-      this.parentElement.scrollLeft -= 216;
+      this.parentElement.scrollLeft -= (itemClientWidth + 5) * 3;
     } else {
-      this.parentElement.scrollLeft += 216;
+      this.parentElement.scrollLeft += (itemClientWidth + 5) * 3;
     }
   },
 
