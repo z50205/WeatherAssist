@@ -261,7 +261,9 @@ const departureDetailView = {
     // 時刻
     this.parentElement.querySelector(
       ".current-time-text"
-    ).textContent = `${data.choosedTime.substring(0, 2)}時`;
+    ).textContent = `${data.choosedTime.substring(0, 2)}時．${
+      choosedWeatherData.weather
+    }`;
     // 溫度
     this.parentElement.querySelector(
       ".departure-temperature-value"
@@ -312,7 +314,9 @@ const destinationDetailView = {
     // 時刻
     this.parentElement.querySelector(
       ".current-time-text"
-    ).textContent = `${data.choosedTime.substring(0, 2)}時`;
+    ).textContent = `${data.choosedTime.substring(0, 2)}時．${
+      choosedWeatherData.weather
+    }`;
     // 溫度
     this.parentElement.querySelector(
       ".destination-temperature-value"
