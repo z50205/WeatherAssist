@@ -386,7 +386,7 @@ const departureTimeView = {
     });
     // add active class
     const choosedTimeWeatherIndex = renderTimeData.findIndex(
-      (e) => e.time === data.choosedTime
+      (e) => e.date === data.choosedDate && e.time === data.choosedTime
     );
     this.parentElement.children[choosedTimeWeatherIndex].classList.add(
       "active"
@@ -480,7 +480,7 @@ const destinationTimeView = {
     });
     // add active class
     const choosedTimeWeatherIndex = renderTimeData.findIndex(
-      (e) => e.time === data.choosedTime
+      (e) => e.date === data.choosedDate && e.time === data.choosedTime
     );
     this.parentElement.children[choosedTimeWeatherIndex].classList.add(
       "active"
@@ -574,15 +574,14 @@ const controlDepLocDropdown = function () {
 const controlChangeDepLoc = function (clickedDist) {
   departureLocView.toggleDropdownList();
   departureLocView.changeLocName(clickedDist);
+  state.departure.location = clickedDist;
   state.departure.weatherData = state.allLocData.find(
     (e) => e.location === clickedDist
   ).weatherData;
   departureDetailView.data = state.departure;
   departureDetailView.render();
-  departureTimeView.render();
   departureTimeView.data = state.departure;
   departureTimeView.render();
-  departureTimeView.changeTime();
   changeBGColorUtil();
   changeDepBigIconUtil();
 };
@@ -624,15 +623,14 @@ const controlDestLocDropdown = function () {
 const controlChangeDestLoc = function (clickedDist) {
   destinationLocView.toggleDropdownList();
   destinationLocView.changeLocName(clickedDist);
+  state.destination.location = clickedDist;
   state.destination.weatherData = state.allLocData.find(
     (e) => e.location === clickedDist
   ).weatherData;
   destinationDetailView.data = state.destination;
   destinationDetailView.render();
-  destinationTimeView.render();
   destinationTimeView.data = state.destination;
   destinationTimeView.render();
-  destinationTimeView.changeTime();
   changeBGColorUtil();
   changeDestBigIconUtil();
 };
