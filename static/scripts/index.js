@@ -413,9 +413,9 @@ const departureTimeView = {
     // item.offsetLeft + item.offsetWidth / 2 - parent.clientWidth / 2;
     this.parentElement.scrollTo({
       left:
-        choosedTimeItem.offsetLeft +
-        choosedTimeItem.offsetWidth / 2 -
-        this.parentElement.offsetWidth / 2,
+        choosedTimeItem.offsetLeft -
+        (choosedTimeItem.offsetWidth + 10) / 2 -
+        (choosedTimeItem.offsetWidth + 5) * 2,
     });
   },
   scroll(direction) {
@@ -502,9 +502,9 @@ const destinationTimeView = {
     // );
     this.parentElement.scrollTo({
       left:
-        choosedTimeItem.offsetLeft +
-        choosedTimeItem.offsetWidth / 2 -
-        this.parentElement.offsetWidth / 2,
+        choosedTimeItem.offsetLeft -
+        (choosedTimeItem.offsetWidth + 10) / 2 -
+        (choosedTimeItem.offsetWidth + 5) * 2,
     });
   },
   scroll(direction) {
@@ -599,7 +599,7 @@ const controlChangeDepTime = function (clickedTimeEl) {
     document.querySelector(".departure-weather-items").children
   ).findIndex((e) => e === clickedTimeEl);
   const clickedTimeData = state.departure.weatherData[clickTimeElInde];
-  console.log(clickedTimeData);
+  // console.log(clickedTimeData);
   state.departure.choosedDate = clickedTimeData.date;
   state.departure.choosedTime = clickedTimeData.time;
   departureDetailView.data = state.departure;
