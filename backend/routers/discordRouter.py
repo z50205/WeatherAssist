@@ -24,7 +24,7 @@ async def post_weather(
             "username": "天氣旅程小助手",
             "embeds": [
               {
-                "title": f"🚀   即將啟航的天氣旅程，去程：{departure_json['location']}   回程：{destination_json['location']}",
+                "title": f"🚀   即將啟航的天氣旅程，出發地：{departure_json['location']}   目的地：{destination_json['location']}",
                 "image": {
                   "url": image_url
                 },
