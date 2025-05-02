@@ -5,6 +5,7 @@
 let locationList = [];
 
 const bgColor = {
+  above35: "#A238A9",
   above30: "#DB2F2F",
   above25: "#CF6F0F",
   above20: "#BCD862",
@@ -12,7 +13,8 @@ const bgColor = {
   above10: "#33AEC9",
   rest: "#4C34BA",
   findColorCode(temp) {
-    if (temp >= 30) return this.above30;
+    if (temp >= 35) return this.above35;
+    else if (temp >= 30) return this.above30;
     else if (temp >= 25) return this.above25;
     else if (temp >= 20) return this.above20;
     else if (temp >= 15) return this.above15;
@@ -401,20 +403,21 @@ const departureTimeView = {
     const choosedTimeItem = this.parentElement.children[i];
     choosedTimeItem.classList.add("active");
     // console.log(
-    //   i,
-    //   choosedTimeItem.clientWidth,
-    //   choosedTimeItem.offsetWidth,
-    //   (this.itemWidth + 5) * (i - 2),
-    //   choosedTimeItem.offsetLeft - choosedTimeItem.offsetWidth * 2,
-    //   choosedTimeItem.offsetLeft +
-    //     choosedTimeItem.offsetWidth / 2 -
-    //     this.parentElement.clientWidth / 2
+    // i,
+    // choosedTimeItem,
+    // choosedTimeItem.offsetLeft,
+    // this.parentElement.offsetLeft
+    // (this.itemWidth + 5) * (i - 2),
+    // choosedTimeItem.offsetLeft - choosedTimeItem.offsetWidth * 2,
+    // choosedTimeItem.offsetLeft +
+    //   choosedTimeItem.offsetWidth / 2 -
+    //   this.parentElement.clientWidth / 2
     // );
     // item.offsetLeft + item.offsetWidth / 2 - parent.clientWidth / 2;
     this.parentElement.scrollTo({
       left:
         choosedTimeItem.offsetLeft -
-        (choosedTimeItem.offsetWidth + 10) / 2 -
+        this.parentElement.offsetLeft -
         (choosedTimeItem.offsetWidth + 5) * 2,
     });
   },
@@ -503,7 +506,7 @@ const destinationTimeView = {
     this.parentElement.scrollTo({
       left:
         choosedTimeItem.offsetLeft -
-        (choosedTimeItem.offsetWidth + 10) / 2 -
+        this.parentElement.offsetLeft -
         (choosedTimeItem.offsetWidth + 5) * 2,
     });
   },
@@ -538,7 +541,9 @@ const destinationTimeView = {
 const backgroundView = {
   parentElement: document.querySelector("body"),
   changeBGColor(departureColor, destinationColor) {
-    this.parentElement.style.background = `linear-gradient(to right,${departureColor} 0%,${departureColor} 15%,${destinationColor} 85%,${destinationColor} 100%)`;
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const gradientDirection = mediaQuery.matches ? "bottom" : "right";
+    this.parentElement.style.background = `linear-gradient(to ${gradientDirection},${departureColor} 0%,${departureColor} 15%,${destinationColor} 85%,${destinationColor} 100%`;
   },
 };
 
@@ -697,6 +702,14 @@ const controlInitDestination = async function (locationName) {
   changeDestBigIconUtil();
 };
 
+const constrolBGColorChangeWhenResize = function () {
+  const mediaQuery = window.matchMedia("(max-width: 768px)");
+  // 只在符合/不符合切換時才觸發
+  mediaQuery.addEventListener("change", () => {
+    changeBGColorUtil();
+  });
+};
+
 const init = async function () {
   await controlUpdateData();
   // 初始資料
@@ -720,6 +733,8 @@ const init = async function () {
       favoriteController.model.setDestinationFavorite(clickedDist);
     }
   });
+  // BG color change when resize
+  constrolBGColorChangeWhenResize();
   // 選取地點
   departureLocView.addHandlerExpandArrow(controlDepLocDropdown);
   departureLocView.addHandlerClickCityLi(controlChangeDepLoc);
