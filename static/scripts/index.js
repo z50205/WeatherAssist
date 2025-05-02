@@ -401,20 +401,21 @@ const departureTimeView = {
     const choosedTimeItem = this.parentElement.children[i];
     choosedTimeItem.classList.add("active");
     // console.log(
-    //   i,
-    //   choosedTimeItem.clientWidth,
-    //   choosedTimeItem.offsetWidth,
-    //   (this.itemWidth + 5) * (i - 2),
-    //   choosedTimeItem.offsetLeft - choosedTimeItem.offsetWidth * 2,
-    //   choosedTimeItem.offsetLeft +
-    //     choosedTimeItem.offsetWidth / 2 -
-    //     this.parentElement.clientWidth / 2
+    // i,
+    // choosedTimeItem,
+    // choosedTimeItem.offsetLeft,
+    // this.parentElement.offsetLeft
+    // (this.itemWidth + 5) * (i - 2),
+    // choosedTimeItem.offsetLeft - choosedTimeItem.offsetWidth * 2,
+    // choosedTimeItem.offsetLeft +
+    //   choosedTimeItem.offsetWidth / 2 -
+    //   this.parentElement.clientWidth / 2
     // );
     // item.offsetLeft + item.offsetWidth / 2 - parent.clientWidth / 2;
     this.parentElement.scrollTo({
       left:
         choosedTimeItem.offsetLeft -
-        (choosedTimeItem.offsetWidth + 10) / 2 -
+        this.parentElement.offsetLeft -
         (choosedTimeItem.offsetWidth + 5) * 2,
     });
   },
@@ -503,7 +504,7 @@ const destinationTimeView = {
     this.parentElement.scrollTo({
       left:
         choosedTimeItem.offsetLeft -
-        (choosedTimeItem.offsetWidth + 10) / 2 -
+        this.parentElement.offsetLeft -
         (choosedTimeItem.offsetWidth + 5) * 2,
     });
   },
@@ -538,7 +539,9 @@ const destinationTimeView = {
 const backgroundView = {
   parentElement: document.querySelector("body"),
   changeBGColor(departureColor, destinationColor) {
-    this.parentElement.style.background = `linear-gradient(to right,${departureColor} 0%,${departureColor} 15%,${destinationColor} 85%,${destinationColor} 100%)`;
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const gradientDirection = mediaQuery.matches ? "to bottom" : "to right";
+    this.parentElement.style.background = `linear-gradient (${gradientDirection},${departureColor} 0%,${departureColor} 15%,${destinationColor} 85%,${destinationColor} 100%)`;
   },
 };
 
